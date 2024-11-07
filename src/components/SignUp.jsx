@@ -19,7 +19,7 @@ export default function SignUp(){
                 <div className='mt-3 p-4'>
                 <Typography variant='h6'>Create an Account</Typography>
                 <form>
-                <div className='mb-3 mt-4'>
+                <div className='mb-3 mt-3'>
                 <Grid2 container spacing={2} alignItems="center">
                 <FormControl fullWidth>
                     <Grid2 container item xs={12} spacing={2}>
