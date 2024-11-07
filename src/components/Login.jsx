@@ -35,9 +35,22 @@ export default function Login(){
                 </div>
                 <div className='mb-3 mt-4'>
                     <Grid2 container spacing={2}>
-                        <Grid2 size={{xs:7}}>
-                            <TextField type='number' sx={{width: '100%'}} label="Phone No"></TextField>
-                        </Grid2>
+                    <Grid2 item size={{xs:7}}>
+                    <TextField
+                        type="number"
+                        label="Phone No"
+                        sx={{
+                        width: '100%',
+                        '& input[type=number]': {
+                            MozAppearance: 'textfield',
+                        },
+                        '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                            WebkitAppearance: 'none',
+                            margin: 0,
+                        },
+                        }}
+                    />
+                    </Grid2>
                         <Grid2 size={{xs:5}}>
                         <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Gender</InputLabel>
