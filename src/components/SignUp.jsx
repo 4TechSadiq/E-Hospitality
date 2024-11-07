@@ -8,7 +8,7 @@ import {TextField } from '@mui/material'
 import {MenuItem, Select} from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select';
 
-export default function Login(){
+export default function SignUp(){
     return(
         <Container className='d-flex rounded-5 shadow p-4 ' sx={{background:'#F7F9F2', marginTop: '10vh'}} maxWidth="lg">
             <Container className=''>
