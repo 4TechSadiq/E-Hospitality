@@ -1,10 +1,12 @@
 import React from "react";
-import Login from "./components/SignUp";
+import Password from "./components/Password";
+import Dashboard  from "./components/userpage/Dashboard";
+
 
 function App() {
   return (
     <>
-    <Login/>
+    <Dashboard />
     </>
   );
 }
