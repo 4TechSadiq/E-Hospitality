@@ -8,10 +8,13 @@
     "@fontsource/roboto": "^5.1.0",
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
+    "@mui/x-charts": "^7.22.2",
     "cra-template": "1.2.0",
+    "primereact": "^10.8.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "swiper": "^11.1.14"
   },
   "scripts": {
     "start": "react-scripts start",
