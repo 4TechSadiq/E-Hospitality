@@ -8,6 +8,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import Bar from "./Bar";
+import UserDetails from "./UserDetails";
 
 export default function Dashboard() {
     return (
@@ -17,13 +19,23 @@ export default function Dashboard() {
                 <div className="container">
                     <div>
                         <Typography className="" variant='h4'>HEALTH</Typography>
-                        <Pie />
+                        
+                        <div className="d-flex">
+                            <div className="col-6 p-5">
+                                <UserDetails/>
+                            </div>
+                            <div>
+                                <Typography variant="subtitle1">Health Index</Typography>
+                                <Bar/>
+                            </div>
+                            
+                        </div>
                     </div>
                 </div>
 
                 <div>
                     <Typography className="text-center" variant='h4'>BOOK APPOINTMENTS</Typography>
-                    <div className="d-flex flex-wrap justify-content-center mt-4 gap-5 p-5">
+                    <div className="mt-4 p-5">
                         <Swiper
                             spaceBetween={30}
                             slidesPerView={3}
