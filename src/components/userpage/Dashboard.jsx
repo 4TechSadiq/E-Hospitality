@@ -16,26 +16,27 @@ export default function Dashboard() {
     return (
         <>
             <Appbar />
-            <div className='container mt-5'>
+            <div className='container '>
                 <div className="container">
-                    <div>
-                        <Typography className="" variant='h4'></Typography>
-                        <div className="d-flex">
-                            <div className="col-4 p-5">
-                                <UserDetails/>
-                            </div>
-                            <div className="col-8">
-                                <Typography variant="subtitle1">Health Index</Typography>
-                                <Bar/>
-                            </div>
-                            
-                        </div>
+                    <UserDetails />
+                </div>
+
+                <div className="container d-flex">
+                    <div className="col-6 mt-4 mb-2">
+                        <Typography variant="h6">Health Status</Typography>
+                        <Pie />
+                    </div>
+                    <div className="col-6 mt-4 mb-2">
+                        <Typography variant="h6">Medication</Typography>
+                        <Bar />
                     </div>
                 </div>
                 <div className="container">
-                    <div className="col-6 mt-4 mb-2">
+                    <div className="col-12 mt-4 mb-2">
                         <Typography variant="h6">Medical History</Typography>
-                        <History/>
+                        <div className="col-10 d-flex justify-content-center">
+                            <History/>
+                        </div>
                     </div>
                 </div>
 

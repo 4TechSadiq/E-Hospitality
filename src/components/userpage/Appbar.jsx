@@ -22,8 +22,17 @@ export default function Appbar() {
                 <MenuIcon>
                 </MenuIcon>
                 </IconButton>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                <Typography className="ms-4" variant="subtitle2">
                     Home
+                </Typography>
+                <Typography className="ms-4" variant="subtitle2">
+                    Consult Doctor
+                </Typography>
+                <Typography className="ms-4" variant="subtitle2">
+                    Medical History
+                </Typography>
+                <Typography className="ms-4" variant="subtitle2" component="div" sx={{ flexGrow: 1 }}>
+                    Medical resources
                 </Typography>
                 <Button color="inherit">Logout</Button>
                 </Toolbar>
