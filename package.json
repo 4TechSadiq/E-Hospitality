@@ -10,6 +10,7 @@
     "@mui/material": "^6.1.6",
     "@mui/x-charts": "^7.22.2",
     "cra-template": "1.2.0",
+    "mdb-react-ui-kit": "^9.0.0",
     "primereact": "^10.8.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

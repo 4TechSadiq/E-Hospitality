@@ -11,6 +11,7 @@ import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import Bar from "./Bar";
 import UserDetails from "./UserDetails";
 import History from "./History";
+import Footer from "./Footer";
 
 export default function Dashboard() {
     return (
@@ -33,8 +34,8 @@ export default function Dashboard() {
                 </div>
                 <div className="container">
                     <div className="col-12 mt-4 mb-2">
-                        <Typography variant="h6">Medical History</Typography>
-                        <div className="col-10 d-flex justify-content-center">
+                        <Typography className="text-center" variant="h6">Medical History</Typography>
+                        <div className="col-12 p-5 d-flex justify-content-center">
                             <History/>
                         </div>
                     </div>
@@ -62,6 +63,7 @@ export default function Dashboard() {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </>
     );
 }
