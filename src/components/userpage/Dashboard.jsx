@@ -10,6 +10,7 @@ import "swiper/css/navigation";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import Bar from "./Bar";
 import UserDetails from "./UserDetails";
+import History from "./History";
 
 export default function Dashboard() {
     return (
@@ -18,18 +19,23 @@ export default function Dashboard() {
             <div className='container mt-5'>
                 <div className="container">
                     <div>
-                        <Typography className="" variant='h4'>HEALTH</Typography>
-                        
+                        <Typography className="" variant='h4'></Typography>
                         <div className="d-flex">
-                            <div className="col-6 p-5">
+                            <div className="col-4 p-5">
                                 <UserDetails/>
                             </div>
-                            <div>
+                            <div className="col-8">
                                 <Typography variant="subtitle1">Health Index</Typography>
                                 <Bar/>
                             </div>
                             
                         </div>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="col-6 mt-4 mb-2">
+                        <Typography variant="h6">Medical History</Typography>
+                        <History/>
                     </div>
                 </div>
 
