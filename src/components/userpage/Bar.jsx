@@ -8,7 +8,7 @@ export default function Bar() {
     <BarChart
       xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
       series={[{ data: [100, 130, 155] }]}
-      width={500}
+      width={350}
       height={300}
     />
     </>

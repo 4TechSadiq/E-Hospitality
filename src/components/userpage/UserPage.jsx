@@ -10,6 +10,7 @@ import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import Bar from "./Bar";
 import UserDetails from "./UserDetails";
 import History from "./History";
+import {Box} from "@mui/material";
 
 export default function UserPage(){
     return(
@@ -19,14 +20,26 @@ export default function UserPage(){
         </div>
 
         <div className="container d-flex flex-wrap">
-            <div className="col-md-6 mt-4 mb-2">
+            <Box 
+                sx={{ 
+                    flexBasis: { xs: '100%', md: '50%' },
+                    maxWidth: { xs: '100%', md: '50%' },
+                }}
+                className="mt-4 mb-2"
+            >
                 <Typography variant="h6">Health Status</Typography>
                 <Pie />
-            </div>
-            <div className="col-md-6 mt-4 mb-2">
+            </Box>
+            <Box 
+                sx={{ 
+                    flexBasis: { xs: '100%', md: '50%' },
+                    maxWidth: { xs: '100%', md: '50%' },
+                }}
+                className="mt-4 mb-2"
+            >
                 <Typography variant="h6">Medication</Typography>
                 <Bar />
-            </div>
+            </Box>
         </div>
 
         <div className="container">
