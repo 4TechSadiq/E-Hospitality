@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -9,15 +9,9 @@ import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Skeleton from '@mui/material/Skeleton';
 
-interface MediaProps {
-  loading?: boolean;
-}
-
-function Media(props: MediaProps) {
-  const { loading = false } = props;
-
+function Media({ loading = false }) {
   return (
-    <Card sx={{ maxWidth: 345, m: 2 }}>
+    <Card sx={{ maxWidth: 800, m: 2 }}>
       <CardHeader
         avatar={
           loading ? (
@@ -30,7 +24,7 @@ function Media(props: MediaProps) {
           )
         }
         action={
-          loading ? null : (
+          loading ? null : ( 
             <IconButton aria-label="settings">
               <MoreVertIcon />
             </IconButton>
@@ -57,21 +51,21 @@ function Media(props: MediaProps) {
         }
       />
       {loading ? (
-        <Skeleton sx={{ height: 190 }} animation="wave" variant="rectangular" />
+        <Skeleton sx={{ height: 390 }} animation="wave" variant="rectangular" />
       ) : (
         <CardMedia
           component="img"
-          height="140"
+          height="390"
           image="https://pi.tedcdn.com/r/talkstar-photos.s3.amazonaws.com/uploads/72bda89f-9bbf-4685-910a-2f151c4f3a8a/NicolaSturgeon_2019T-embed.jpg?w=512"
           alt="Nicola Sturgeon on a TED talk stage"
         />
       )}
       <CardContent>
         {loading ? (
-          <React.Fragment>
+          <>
             <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
             <Skeleton animation="wave" height={10} width="80%" />
-          </React.Fragment>
+          </>
         ) : (
           <Typography variant="body2" component="p" sx={{ color: 'text.secondary' }}>
             {
@@ -84,7 +78,7 @@ function Media(props: MediaProps) {
   );
 }
 
-export default function Facebook() {
+export default function Resource() {
   return (
     <div>
       <Media loading />

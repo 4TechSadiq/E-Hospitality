@@ -8,7 +8,7 @@ import { Button } from '@mui/material';
 
 export default function Slider() {
   return (
-    <Card sx={{maxWidth: 340 }}>
+    <Card sx={{maxWidth: 340 }} className='mt-4'>
       <CardActionArea className='d-flex'>
         <CardMedia
           component="img"
