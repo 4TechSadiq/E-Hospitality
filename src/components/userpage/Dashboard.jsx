@@ -11,11 +11,9 @@ export default function Dashboard() {
     return (
         <>
             <Appbar />
-            <div className='container justify-content-center d-flex'>
-                {/* <UserPage/> 
-                 <Consult/> 
-                 <Resource/> */}
-                <History/>
+            <div className='container justify-content-center '>
+                <UserPage/> 
+                
 
             </div>
             <Footer/>
