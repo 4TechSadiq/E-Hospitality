@@ -11,8 +11,10 @@ import Bar from "./Bar";
 import UserDetails from "./UserDetails";
 import History from "./History";
 import {Box} from "@mui/material";
+// import { SwiperClass } from "swiper/react";
 
 export default function UserPage(){
+    // SwiperCore.use([Pagination, Navigation, Autoplay]);
     return(
         <>
         <div className="container">
@@ -51,26 +53,32 @@ export default function UserPage(){
         </div>
 
         <div>
-            <Typography className="text-center" variant='h4'>BOOK APPOINTMENTS</Typography>
-            <div className="mt-4 p-5">
-                <Swiper
-                    spaceBetween={30}
-                    slidesPerView={3}
-                    pagination={{ clickable: true }}
-                    navigation
-                    autoplay={{ delay: 3000 }}
-                    modules={[Pagination, Navigation, Autoplay]}
-                    className="mySwiper"
-                >
-                    <SwiperSlide><Slider /></SwiperSlide>
-                    <SwiperSlide><Slider /></SwiperSlide>
-                    <SwiperSlide><Slider /></SwiperSlide>
-                    <SwiperSlide><Slider /></SwiperSlide>
-                    <SwiperSlide><Slider /></SwiperSlide>
-                    <SwiperSlide><Slider /></SwiperSlide>
-                </Swiper>
-            </div>
-        </div>
-        </>
+      <Typography className="text-center" variant="h4">BOOK APPOINTMENTS</Typography>
+      <div className="mt-4 p-1 mb-4">
+        <Swiper
+          spaceBetween={30}
+          slidesPerView={3}
+          pagination={{ clickable: true }}
+          navigation
+          autoplay={{ delay: 3000 }}
+          modules={[Pagination, Navigation, Autoplay]}
+          className="mySwiper"
+          breakpoints={{
+            // Adjust slidesPerView based on screen width
+            320: { slidesPerView: 1 },    // Mobile devices
+            640: { slidesPerView: 2 },    // Small tablets
+            1024: { slidesPerView: 3 },   // Desktop and larger screens
+          }}
+        >
+          <SwiperSlide><Slider /></SwiperSlide>
+          <SwiperSlide><Slider /></SwiperSlide>
+          <SwiperSlide><Slider /></SwiperSlide>
+          <SwiperSlide><Slider /></SwiperSlide>
+          <SwiperSlide><Slider /></SwiperSlide>
+          <SwiperSlide><Slider /></SwiperSlide>
+        </Swiper>
+      </div>
+    </div>
+    </>
     )
 }
