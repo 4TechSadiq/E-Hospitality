@@ -18,16 +18,17 @@ export default function UserPage(){
                     <UserDetails />
         </div>
 
-        <div className="container d-flex">
-            <div className="col-6 mt-4 mb-2">
+        <div className="container d-flex flex-wrap">
+            <div className="col-md-6 mt-4 mb-2">
                 <Typography variant="h6">Health Status</Typography>
                 <Pie />
             </div>
-            <div className="col-6 mt-4 mb-2">
+            <div className="col-md-6 mt-4 mb-2">
                 <Typography variant="h6">Medication</Typography>
                 <Bar />
             </div>
         </div>
+
         <div className="container">
             <div className="col-12 mt-4 mb-2">
                 <Typography className="text-center" variant="h6">Medical History</Typography>
