@@ -1,7 +1,7 @@
 import React from "react";
-import Password from "./components/Password";
+import Password from "./components/userpage/Password";
 import Dashboard  from "./components/userpage/Dashboard";
-import SignUp from "./components/SignUp";
+import SignUp from "./components/userpage/SignUp";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
     <BrowserRouter>
           <Routes>
             {/* <Route path='/' element={<Login/>}></Route> */}
-             <Route path='/' element={<Dashboard/>}/>
+             <Route path='/UserDash' element={<Dashboard/>}/>
               <Route path=':section' element={<Dashboard/>}/>
           </Routes>
         </BrowserRouter>
