@@ -34,7 +34,7 @@ export default function Login(){
                 </div>
                 <div className='mt-2'>
                     <a href='#'>
-                        <Typography className='text-center'>Already have an account?</Typography>
+                        <Typography className='text-center'>Forgot Passowrd??</Typography>
                     </a>
                 </div>
                 </form>

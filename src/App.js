@@ -4,11 +4,14 @@ import Dashboard  from "./components/userpage/Dashboard";
 import SignUp from "./components/userpage/SignUp";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./components/Doctor/Login";
+import DoctorDashboard from "./components/Doctor/DoctorDashboard";
 
 function App() {
   return (
     <>
-    <Login/>
+    {/* <Login/> */}
+    <DoctorDashboard/>
+
     {/* <BrowserRouter>
           <Routes>
              <Route path='/' element={<Login/>}></Route>
