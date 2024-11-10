@@ -44,8 +44,7 @@ export default function UserPage(){
 
         <div className="container">
             <div className="col-12 mt-4 mb-2">
-                <Typography className="text-center" variant="h6">Medical History</Typography>
-                <div className="col-12 p-5 d-flex justify-content-center">
+                <div className="col-lg-12 col-sm-12  d-flex justify-content-center">
                     <History/>
                 </div>
             </div>

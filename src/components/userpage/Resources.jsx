@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Skeleton from '@mui/material/Skeleton';
+import { Box } from '@mui/material';
 
 function Media({ loading = false }) {
   return (
@@ -80,9 +81,15 @@ function Media({ loading = false }) {
 
 export default function Resource() {
   return (
-    <div>
-      <Media loading />
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      minHeight="100vh"
+    >
       <Media />
-    </div>
+      <Media />
+    </Box>
   );
 }
