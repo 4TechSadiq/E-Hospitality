@@ -1,3 +1,4 @@
+// Inside Appbar component
 import React, { useState } from "react";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -14,7 +15,7 @@ import Divider from '@mui/material/Divider';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
-export default function Appbar() {
+const Appbar = ({ onSelectSection }) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -26,22 +27,27 @@ export default function Appbar() {
         setDrawerOpen(open);
     };
 
+    const handleMenuClick = (section) => {
+        onSelectSection(section);  // Update the active section
+        setDrawerOpen(false);      // Close the drawer on mobile after selection
+    };
+
     const menuItems = (
         <List>
-            <ListItem button>
+            <ListItem button onClick={() => handleMenuClick('UserPage')}>
                 <ListItemText primary="Home" />
             </ListItem>
-            <ListItem button>
+            <ListItem button onClick={() => handleMenuClick('Consult')}>
                 <ListItemText primary="Consult Doctor" />
             </ListItem>
-            <ListItem button>
+            <ListItem button onClick={() => handleMenuClick('MedicalHistory')}>
                 <ListItemText primary="Medical History" />
             </ListItem>
-            <ListItem button>
+            <ListItem button onClick={() => handleMenuClick('Resources')}>
                 <ListItemText primary="Medical Resources" />
             </ListItem>
             <Divider />
-            <ListItem button>
+            <ListItem button onClick={() => handleMenuClick('Logout')}>
                 <ListItemText primary="Logout" />
             </ListItem>
         </List>
@@ -67,11 +73,11 @@ export default function Appbar() {
 
                     {!isMobile && (
                         <>
-                            <Button color="inherit">Home</Button>
-                            <Button color="inherit">Consult Doctor</Button>
-                            <Button color="inherit">Medical History</Button>
-                            <Button color="inherit">Medical Resources</Button>
-                            <Button color="inherit">Logout</Button>
+                            <Button color="inherit" onClick={() => handleMenuClick('UserPage')}>Home</Button>
+                            <Button color="inherit" onClick={() => handleMenuClick('Consult')}>Consult Doctor</Button>
+                            <Button color="inherit" onClick={() => handleMenuClick('MedicalHistory')}>Medical History</Button>
+                            <Button color="inherit" onClick={() => handleMenuClick('Resources')}>Medical Resources</Button>
+                            <Button color="inherit" onClick={() => handleMenuClick('Logout')}>Logout</Button>
                         </>
                     )}
 
@@ -86,4 +92,6 @@ export default function Appbar() {
             </AppBar>
         </Box>
     );
-}
+};
+
+export default Appbar;
