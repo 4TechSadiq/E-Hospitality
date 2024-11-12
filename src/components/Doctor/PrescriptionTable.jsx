@@ -8,6 +8,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -28,7 +33,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+
 export default function PrescriptionTable() {
+  const [age, setAge] = React.useState('');
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value);
+  };
+
+
   const [rows, setRows] = React.useState([
     { id: 1, medicine: '', dosage: '', timesPerDay: '', routine: '' },
     { id: 2, medicine: '', dosage: '', timesPerDay: '', routine: '' },
@@ -78,20 +91,38 @@ export default function PrescriptionTable() {
                 />
               </StyledTableCell>
               <StyledTableCell align="right">
-                <TextField
-                  variant="filled"
-                  size="small"
-                  value={row.timesPerDay}
-                  onChange={(e) => handleInputChange(index, 'timesPerDay', e.target.value)}
-                />
+              <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              value={age}
+              label="Age"
+              sx={{width:'100%'}}
+              onChange={handleChange}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
               </StyledTableCell>
               <StyledTableCell align="right">
-                <TextField
-                  variant="filled"
-                  size="small"
-                  value={row.routine}
-                  onChange={(e) => handleInputChange(index, 'routine', e.target.value)}
-                />
+              <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              value={age}
+              label="Age"
+              sx={{width:'100%'}}
+              onChange={handleChange}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
               </StyledTableCell>
             </StyledTableRow>
           ))}
