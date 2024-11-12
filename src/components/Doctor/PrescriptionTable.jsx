@@ -13,6 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { Button } from '@mui/material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -57,6 +58,7 @@ export default function PrescriptionTable() {
   };
 
   return (
+    <form>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="prescription table">
         <TableHead>
@@ -127,5 +129,8 @@ export default function PrescriptionTable() {
         </TableBody>
       </Table>
     </TableContainer>
+    <Button variant='contained' className='mt-3' type='reset'>Clear</Button>
+    <Button variant='contained' className='mt-3 ms-2' type='submit'>Submit</Button>
+    </form>
   );
 }

@@ -82,6 +82,7 @@ export default function PatientModule() {
                 </Grid2>
         </Container>   
         <Container className="mt-4">
+            <Typography variant="h5" className="mb-3">Prescription Table</Typography>
             <PrescriptionTable />
         </Container>   
           
