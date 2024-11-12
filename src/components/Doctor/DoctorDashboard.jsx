@@ -9,6 +9,7 @@ import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import Grid from '@mui/material/Grid2';
+import Appointments from './Appointments';
 
 const NAVIGATION = [
   {
@@ -111,10 +112,10 @@ export default function DoctorDashboard(props) {
           <Grid container spacing={1}>
             <Grid size={5} />
             <Grid size={12}>
-              <Skeleton height={14} />
+              <Appointments />
             </Grid>
             <Grid size={12}>
-              <Skeleton height={14} />
+              <Skeleton height={140} />
             </Grid>
             <Grid size={4}>
               <Skeleton height={100} />
