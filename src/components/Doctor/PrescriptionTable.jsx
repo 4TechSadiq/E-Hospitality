@@ -97,7 +97,6 @@ export default function PrescriptionTable() {
               value={age}
               label="Age"
               sx={{width:'100%'}}
-              onChange={handleChange}
             >
               <MenuItem value="">
                 <em>None</em>
@@ -114,7 +113,6 @@ export default function PrescriptionTable() {
               value={age}
               label="Age"
               sx={{width:'100%'}}
-              onChange={handleChange}
             >
               <MenuItem value="">
                 <em>None</em>

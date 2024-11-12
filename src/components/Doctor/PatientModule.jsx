@@ -4,6 +4,7 @@ import {Box} from "@mui/material";
 import { Grid } from "swiper/modules";
 import { TextField } from "@mui/material";
 import PrescriptionTable from "./PrescriptionTable";
+import Barchart from "./Barchart";
 
 export default function PatientModule() {
     return(
@@ -66,11 +67,24 @@ export default function PatientModule() {
                 }}>
                 <Typography variant="subtitle1" gutterBottom component="div">Disease Description: John Doe</Typography>
             </Box>
-        </Container>   
+        </Container> 
+        <Container>
+                <Grid2 container spacing={2}>
+                    <Grid2 item size={6}>
+                        <Typography className="mt-3" variant="h5">Health Index</Typography>
+                        <Barchart/>
+                    </Grid2>
 
+                    <Grid2 item size={6}>
+                        <Typography className="mt-3" variant="h5">Health Index</Typography>
+                        <Barchart/>
+                    </Grid2>
+                </Grid2>
+        </Container>   
         <Container className="mt-4">
             <PrescriptionTable />
-        </Container>      
+        </Container>   
+          
         </>
     )
 }
