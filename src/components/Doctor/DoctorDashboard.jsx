@@ -10,6 +10,8 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import Grid from '@mui/material/Grid2';
 import Appointments from './Appointments';
+import PatientModule from './PatientModule';
+
 
 const NAVIGATION = [
   {
@@ -115,7 +117,7 @@ export default function DoctorDashboard(props) {
               <Appointments />
             </Grid>
             <Grid size={12}>
-              <Skeleton height={140} />
+              <PatientModule />
             </Grid>
             <Grid size={4}>
               <Skeleton height={100} />
