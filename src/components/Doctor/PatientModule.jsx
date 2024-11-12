@@ -3,6 +3,7 @@ import { Container, Grid2, Typography } from "@mui/material";
 import {Box} from "@mui/material";
 import { Grid } from "swiper/modules";
 import { TextField } from "@mui/material";
+import PrescriptionTable from "./PrescriptionTable";
 
 export default function PatientModule() {
     return(
@@ -68,15 +69,7 @@ export default function PatientModule() {
         </Container>   
 
         <Container className="mt-4">
-            <form>
-            <TextField
-            hiddenLabel
-            id="filled-hidden-label-small"
-            defaultValue="Small"
-            variant="filled"
-            size="small"
-            />
-            </form>
+            <PrescriptionTable />
         </Container>      
         </>
     )
