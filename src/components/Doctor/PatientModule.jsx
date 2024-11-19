@@ -5,6 +5,7 @@ import { Grid } from "swiper/modules";
 import { TextField } from "@mui/material";
 import PrescriptionTable from "./PrescriptionTable";
 import Barchart from "./Barchart";
+import History from "./History";
 
 export default function PatientModule() {
     return(
@@ -81,10 +82,17 @@ export default function PatientModule() {
                     </Grid2>
                 </Grid2>
         </Container>   
+ 
+        <Container className="mt-4">
+            <Typography variant="h5">Medical History</Typography>
+            <History/>
+        </Container>
+
         <Container className="mt-4">
             <Typography variant="h5" className="mb-3">Prescription Table</Typography>
             <PrescriptionTable />
         </Container>   
+
           
         </>
     )
