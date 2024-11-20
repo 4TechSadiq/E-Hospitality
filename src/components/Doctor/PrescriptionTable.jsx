@@ -13,7 +13,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
+import {Container} from '@mui/material';
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -59,6 +61,13 @@ export default function PrescriptionTable() {
 
   return (
     <form>
+      <Container className='mt-3 mb-3 p-0'>
+      <Typography variant='h6'>Enter Disease</Typography>
+      <TextField
+                  variant="filled"
+                  size="small"
+                />
+      </Container>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="prescription table">
         <TableHead>

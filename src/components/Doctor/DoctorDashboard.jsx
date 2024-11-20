@@ -2,16 +2,13 @@ import * as React from 'react';
 import { extendTheme, styled } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import DescriptionIcon from '@mui/icons-material/Description';
-import LayersIcon from '@mui/icons-material/Layers';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import Grid from '@mui/material/Grid2';
 import Appointments from './Appointments';
 import PatientModule from './PatientModule';
-
+import PrescriptionTable from './PrescriptionTable';
 
 const NAVIGATION = [
   {
@@ -27,35 +24,6 @@ const NAVIGATION = [
     segment: 'orders',
     title: 'Prescription',
     icon: <ShoppingCartIcon />,
-  },
-  {
-    kind: 'divider',
-  },
-  {
-    kind: 'header',
-    title: 'Analytics',
-  },
-  {
-    segment: 'reports',
-    title: 'Reports',
-    icon: <BarChartIcon />,
-    children: [
-      {
-        segment: 'sales',
-        title: 'Sales',
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: 'traffic',
-        title: 'Traffic',
-        icon: <DescriptionIcon />,
-      },
-    ],
-  },
-  {
-    segment: 'integrations',
-    title: 'Integrations',
-    icon: <LayersIcon />,
   },
 ];
 
@@ -87,20 +55,40 @@ function useDemoRouter(initialPath) {
   return router;
 }
 
-const Skeleton = styled('div')(({ theme, height }) => ({
-  backgroundColor: theme.palette.action.hover,
-  borderRadius: theme.shape.borderRadius,
-  height,
-  content: '" "',
-}));
-
 export default function DoctorDashboard(props) {
   const { window } = props;
 
   const router = useDemoRouter('/dashboard');
 
-  // Remove this const when copying and pasting into your project.
+  // Get the current page from the router
+  const currentPage = router.pathname;
+
+  // Demo window handling
   const demoWindow = window ? window() : undefined;
+
+  // Render the correct component based on the current page
+  const renderContent = () => {
+    switch (currentPage) {
+      case '/dashboard':
+        return (
+          <>
+            <Grid container spacing={1}>
+              <Grid size={5} />
+              <Grid size={12}>
+                {/* <Appointments /> */}
+              </Grid>
+              <Grid size={12}>
+                <PatientModule />
+              </Grid>
+            </Grid>
+          </>
+        );
+      case '/orders': // Prescription route
+        return <PrescriptionTable />;
+      default:
+        return <div>Page not found</div>;
+    }
+  };
 
   return (
     <AppProvider
@@ -110,35 +98,7 @@ export default function DoctorDashboard(props) {
       window={demoWindow}
     >
       <DashboardLayout>
-        <PageContainer>
-          <Grid container spacing={1}>
-            <Grid size={5} />
-            <Grid size={12}>
-              {/* <Appointments /> */}
-            </Grid>
-            <Grid size={12}>
-              <PatientModule />
-            </Grid>
-            <Grid size={4}>
-            </Grid>
-            <Grid size={8}>
-            </Grid>
-
-            <Grid size={12}>
-            </Grid>
-            <Grid size={12}>
-            </Grid>
-
-            <Grid size={3}>
-            </Grid>
-            <Grid size={3}>
-            </Grid>
-            <Grid size={3}>
-            </Grid>
-            <Grid size={3}>
-            </Grid>
-          </Grid>
-        </PageContainer>
+        <PageContainer>{renderContent()}</PageContainer>
       </DashboardLayout>
     </AppProvider>
   );

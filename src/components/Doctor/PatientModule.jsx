@@ -88,10 +88,10 @@ export default function PatientModule() {
             <History/>
         </Container>
 
-        <Container className="mt-4">
+        {/* <Container className="mt-4">
             <Typography variant="h5" className="mb-3">Prescription Table</Typography>
             <PrescriptionTable />
-        </Container>   
+        </Container>    */}
 
           
         </>
