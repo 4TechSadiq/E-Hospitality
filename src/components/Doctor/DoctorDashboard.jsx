@@ -9,6 +9,7 @@ import Grid from '@mui/material/Grid2';
 import Appointments from './Appointments';
 import PatientModule from './PatientModule';
 import PrescriptionTable from './PrescriptionTable';
+import { Box, Button, Container, Typography } from '@mui/material';
 
 
 const NAVIGATION = [
@@ -77,6 +78,15 @@ export default function DoctorDashboard(props) {
               <Grid size={5} />
               <Grid size={12}>
                 <Appointments />
+                <Container  className='mt-3'>
+                <Typography textAlign="center" variant='h6'>Go Offline</Typography>
+                  <Box 
+                  display="flex"
+                  justifyContent="center"
+                  >
+                    <Button variant='contained'>Go Offline</Button>
+                  </Box>
+                </Container>
               </Grid>
               <Grid size={12}>
                 <PatientModule />
