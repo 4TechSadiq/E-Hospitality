@@ -8,14 +8,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormHelperText from '@mui/material/FormHelperText';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { Button, Typography } from '@mui/material';
-import {Container} from '@mui/material';
-
+import Select from '@mui/material/Select';
+import { Button, Typography, Box, Container } from '@mui/material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,15 +31,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-
 export default function PrescriptionTable() {
-  const [age, setAge] = React.useState('');
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-
-
   const [rows, setRows] = React.useState([
     { id: 1, medicine: '', dosage: '', timesPerDay: '', routine: '' },
     { id: 2, medicine: '', dosage: '', timesPerDay: '', routine: '' },
@@ -61,85 +48,94 @@ export default function PrescriptionTable() {
 
   return (
     <form>
-      <Container className='mt-3 mb-3 p-0'>
-      <Typography variant='h6'>Enter Disease</Typography>
-      <TextField
-                  variant="filled"
-                  size="small"
-                />
+      <Container className="mt-3 mb-3 p-0">
+        <Typography variant="h6" gutterBottom>
+          Enter Disease
+        </Typography>
+        <TextField variant="filled" size="small" fullWidth />
       </Container>
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="prescription table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>SINo</StyledTableCell>
-            <StyledTableCell align="right">Medicine Name</StyledTableCell>
-            <StyledTableCell align="right">Dosage (mg)</StyledTableCell>
-            <StyledTableCell align="right">Times per Day</StyledTableCell>
-            <StyledTableCell align="right">Routine (Before/After)</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row, index) => (
-            <StyledTableRow key={row.id}>
-              <StyledTableCell component="th" scope="row">
-                {row.id}
-              </StyledTableCell>
-              <StyledTableCell align="right">
-                <TextField
-                  variant="filled"
-                  size="small"
-                  value={row.medicine}
-                  onChange={(e) => handleInputChange(index, 'medicine', e.target.value)}
-                />
-              </StyledTableCell>
-              <StyledTableCell align="right">
-                <TextField
-                  variant="filled"
-                  size="small"
-                  value={row.dosage}
-                  onChange={(e) => handleInputChange(index, 'dosage', e.target.value)}
-                />
-              </StyledTableCell>
-              <StyledTableCell align="right">
-              <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              value={age}
-              label="Age"
-              sx={{width:'100%'}}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-              </StyledTableCell>
-              <StyledTableCell align="right">
-              <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              value={age}
-              label="Age"
-              sx={{width:'100%'}}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    <Button variant='contained' className='mt-3' type='reset'>Clear</Button>
-    <Button variant='contained' className='mt-3 ms-2' type='submit'>Submit</Button>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 700 }} aria-label="prescription table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>SINo</StyledTableCell>
+              <StyledTableCell align="right">Medicine Name</StyledTableCell>
+              <StyledTableCell align="right">Dosage (mg)</StyledTableCell>
+              <StyledTableCell align="right">Times per Day</StyledTableCell>
+              <StyledTableCell align="right">Routine (Before/After)</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row, index) => (
+              <StyledTableRow key={row.id}>
+                <StyledTableCell component="th" scope="row">
+                  {row.id}
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  <TextField
+                    variant="filled"
+                    size="small"
+                    value={row.medicine}
+                    onChange={(e) => handleInputChange(index, 'medicine', e.target.value)}
+                  />
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  <TextField
+                    variant="filled"
+                    size="small"
+                    value={row.dosage}
+                    onChange={(e) => handleInputChange(index, 'dosage', e.target.value)}
+                  />
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  <Select
+                    value={row.timesPerDay || ''}
+                    onChange={(e) => handleInputChange(index, 'timesPerDay', e.target.value)}
+                    size="small"
+                    fullWidth
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value="1">1</MenuItem>
+                    <MenuItem value="2">2</MenuItem>
+                    <MenuItem value="3">3</MenuItem>
+                  </Select>
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  <Select
+                    value={row.routine || ''}
+                    onChange={(e) => handleInputChange(index, 'routine', e.target.value)}
+                    size="small"
+                    fullWidth
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value="Before">Before</MenuItem>
+                    <MenuItem value="After">After</MenuItem>
+                  </Select>
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {/* Buttons */}
+      <Box
+        display="flex"
+        justifyContent="flex-end"
+        alignItems="center"
+        mt={3}
+        gap={2}
+      >
+        <Button variant="contained" color="secondary" type="reset">
+          Clear
+        </Button>
+        <Button variant="contained" color="primary" type="submit">
+          Submit
+        </Button>
+      </Box>
     </form>
   );
 }

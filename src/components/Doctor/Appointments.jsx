@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {DataGrid} from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
-import { Typography } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -14,49 +14,63 @@ const columns = [
     width: 90,
   },
   {
-    field: 'Time Schedule',
+    field: 'timeSchedule',
     headerName: 'Time Schedule',
-    description: 'This column has a value getter and is not sortable.',
+    description: 'This column is derived from first and last name.',
     sortable: false,
-    width: 160,
-    valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
+    width: 200,
+    valueGetter: (params) => `${params?.row?.firstName || ''} ${params?.row?.lastName || ''}`,
   },
   {
-    field: 'Action',
-    headerName: 'Age',
-    type: 'number',
-    width: 90,
-  }
+    field: 'action',
+    headerName: 'Action',
+    width: 150,
+    renderCell: (params) => (
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleActionClick(params.row)}
+      >
+        Action
+      </Button>
+    ),
+  },
 ];
 
 const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 , Action: 'Edit'},
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42,Action: 'Edit' },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45,Action: 'Edit' },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16,Action: 'Edit' },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null,Action: 'Edit' },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150,Action: 'Edit' },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44,Action: 'Edit' },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36,Action: 'Edit' },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65,Action: 'Edit' },
+  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
+  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
+  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
+  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
+  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: 25 },
+  { id: 6, lastName: 'Melisandre', firstName: "Cinderella", age: 150 },
+  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
+
+const handleActionClick = (row) => {
+  alert(`Action clicked for ${row.firstName || 'Unknown'} ${row.lastName || 'Unknown'}`);
+};
 
 const paginationModel = { page: 0, pageSize: 5 };
 
 export default function Appointments() {
   return (
     <>
-    <Typography variant="h6" gutterBottom component="div">Appointments</Typography>
-    <Paper sx={{ height: 400, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
-        sx={{ border: 0 }}
-      />
-    </Paper>
+      <Typography variant="h6" gutterBottom>
+        Appointments
+      </Typography>
+      <Paper sx={{ height: 400, width: '100%' }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{ pagination: { paginationModel } }}
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
+          sx={{ border: 0 }}
+        />
+      </Paper>
     </>
   );
 }

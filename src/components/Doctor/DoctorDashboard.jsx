@@ -10,6 +10,7 @@ import Appointments from './Appointments';
 import PatientModule from './PatientModule';
 import PrescriptionTable from './PrescriptionTable';
 
+
 const NAVIGATION = [
   {
     kind: 'header',
@@ -75,7 +76,7 @@ export default function DoctorDashboard(props) {
             <Grid container spacing={1}>
               <Grid size={5} />
               <Grid size={12}>
-                {/* <Appointments /> */}
+                <Appointments />
               </Grid>
               <Grid size={12}>
                 <PatientModule />
