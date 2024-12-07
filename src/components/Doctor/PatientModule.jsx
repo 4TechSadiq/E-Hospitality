@@ -6,6 +6,7 @@ import { TextField } from "@mui/material";
 import PrescriptionTable from "./PrescriptionTable";
 import Barchart from "./Barchart";
 import History from "./History";
+import PrescriptionModal from "./PrescriptionModal";
 
 export default function PatientModule() {
     return(
@@ -88,10 +89,10 @@ export default function PatientModule() {
             <History/>
         </Container>
 
-        {/* <Container className="mt-4">
+        <Container className="mt-4">
             <Typography variant="h5" className="mb-3">Prescription Table</Typography>
-            <PrescriptionTable />
-        </Container>    */}
+            <PrescriptionModal />
+        </Container>   
 
           
         </>

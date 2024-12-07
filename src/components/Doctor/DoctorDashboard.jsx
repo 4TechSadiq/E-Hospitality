@@ -1,36 +1,36 @@
-import * as React from 'react';
-import { extendTheme, styled } from '@mui/material/styles';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { AppProvider } from '@toolpad/core/AppProvider';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import { PageContainer } from '@toolpad/core/PageContainer';
-import Grid from '@mui/material/Grid2';
-import Appointments from './Appointments';
-import PatientModule from './PatientModule';
-import PrescriptionTable from './PrescriptionTable';
-import { Box, Button, Container, Grid2, Typography } from '@mui/material';
+import * as React from "react";
+import { extendTheme } from "@mui/material/styles";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { AppProvider } from "@toolpad/core/AppProvider";
+import { DashboardLayout } from "@toolpad/core/DashboardLayout";
+import { PageContainer } from "@toolpad/core/PageContainer";
+import Grid from "@mui/material/Grid";
+import Appointments from "./Appointments";
+import PatientModule from "./PatientModule";
+import Histories from "./Histories";
+import { Box, Button, Container, Typography } from "@mui/material";
 
 const NAVIGATION = [
   {
-    kind: 'header',
-    title: 'Main items',
+    kind: "header",
+    title: "Main items",
   },
   {
-    segment: 'dashboard',
-    title: 'Dashboard',
+    segment: "dashboard",
+    title: "Dashboard",
     icon: <DashboardIcon />,
   },
   {
-    segment: 'orders',
-    title: 'Prescription',
+    segment: "orders",
+    title: "Histories",
     icon: <ShoppingCartIcon />,
   },
 ];
 
 const demoTheme = extendTheme({
   colorSchemes: { light: true, dark: true },
-  colorSchemeSelector: 'class',
+  colorSchemeSelector: "class",
   breakpoints: {
     values: {
       xs: 0,
@@ -59,60 +59,69 @@ function useDemoRouter(initialPath) {
 export default function DoctorDashboard(props) {
   const { window } = props;
 
-  const router = useDemoRouter('/dashboard');
-
+  const router = useDemoRouter("/dashboard");
   const [selectedPatient, setSelectedPatient] = React.useState(null);
 
   const handleOpenPatient = (patientId) => {
     setSelectedPatient(patientId);
+    router.navigate(`/dashboard/patient/${patientId}`);
   };
 
   const renderContent = () => {
+    if (router.pathname.startsWith("/dashboard/patient")) {
+      return <PatientModule patientId={selectedPatient} />;
+    }
+
     switch (router.pathname) {
-      case '/dashboard':
+      case "/dashboard":
         return (
           <>
             <Grid container spacing={1}>
-              <Grid size={12}>
+              <Grid item xs={12}>
                 <Box display="flex" gap={2}>
                   <Typography variant="h5">Status:</Typography>
-                  <Typography variant="h5" className="text-danger">
+                  <Typography variant="h5" color="error">
                     Offline
                   </Typography>
                 </Box>
-                {selectedPatient ? (
-                  <PatientModule patientId={selectedPatient} />
-                ) : (
+
+                {!selectedPatient ? (
                   <Appointments onOpenPatient={handleOpenPatient} />
+                ) : (
+                  <PatientModule patientId={selectedPatient} />
                 )}
+
                 <Container>
-                  <Grid2 container className="mt-3 d-flex justify-content-center" spacing={2}>
-                    <Grid2 size={3}>
+                  <Grid container spacing={2} justifyContent="center" className="mt-3">
+                    <Grid item xs={3}>
                       <Typography textAlign="center" variant="h6">
                         Go Pause
                       </Typography>
                       <Box display="flex" justifyContent="center">
-                        <Button style={{ background: '#DE3163' }} variant="contained">
+                        <Button style={{ background: "#DE3163" }} variant="contained">
                           Pause
                         </Button>
                       </Box>
-                    </Grid2>
-                    <Grid2 size={3}>
+                    </Grid>
+
+                    <Grid item xs={3}>
                       <Typography textAlign="center" variant="h6">
                         Go Offline
                       </Typography>
                       <Box display="flex" justifyContent="center">
                         <Button variant="contained">Offline</Button>
                       </Box>
-                    </Grid2>
-                  </Grid2>
+                    </Grid>
+                  </Grid>
                 </Container>
               </Grid>
             </Grid>
           </>
         );
-      case '/orders': // Prescription route
-        return <PrescriptionTable />;
+
+      case "/orders":
+        return <Histories />;
+
       default:
         return <div>Page not found</div>;
     }

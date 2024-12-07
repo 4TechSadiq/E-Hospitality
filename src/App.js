@@ -1,30 +1,32 @@
 import React from "react";
-import Password from "./components/userpage/Password";
-import Dashboard  from "./components/userpage/Dashboard";
-import SignUp from "./components/userpage/SignUp";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./components/Doctor/Login";
+import Dashboard from "./components/userpage/Dashboard";
 import DoctorDashboard from "./components/Doctor/DoctorDashboard";
 import PatientModule from "./components/Doctor/PatientModule";
-
+import Password from "./components/userpage/Password";
+import SignUp from "./components/userpage/SignUp";
 
 function App() {
   return (
-    <>
-    {/* <Login/> */}
-    {/* <DoctorDashboard/> */}
-
     <BrowserRouter>
-          <Routes>
-             <Route path='/' element={<Login/>}></Route>
-             <Route path='/UserDashboard' element={<Dashboard/>}/>
-             <Route path='/DoctorDashboard' element={<DoctorDashboard/>}>
-              <Route path=":section" element={<DoctorDashboard/>}></Route>
-             </Route>
-             <Route></Route>
-          </Routes>
+      <Routes>
+        {/* Login Route */}
+        <Route path="/" element={<Login />} />
+
+        {/* User Dashboard */}
+        <Route path="/UserDashboard" element={<Dashboard />} />
+
+        {/* Doctor Dashboard */}
+        <Route path="/DoctorDashboard" element={<DoctorDashboard />}>
+          {/* Nested Routes for Sections */}
+          <Route path="patient/:patientId" element={<PatientModule />} />
+        </Route>
+
+        {/* Fallback Route */}
+        <Route path="*" element={<div>404 - Page Not Found</div>} />
+      </Routes>
     </BrowserRouter>
-    </>
   );
 }
 
