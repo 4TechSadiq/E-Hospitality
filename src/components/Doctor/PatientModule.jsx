@@ -74,7 +74,7 @@ export default function PatientModule() {
                     <Grid2 item size={6}>
                         <Typography className="mt-3" variant="h5">Health Index</Typography>
                         <Barchart/>
-                    </Grid2>
+                    </Grid2> 
 
                     <Grid2 item size={6}>
                         <Typography className="mt-3" variant="h5">Health Index</Typography>

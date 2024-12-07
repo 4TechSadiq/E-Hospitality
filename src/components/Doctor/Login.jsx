@@ -7,6 +7,8 @@ import {Box} from '@mui/material'
 import {TextField } from '@mui/material'
 import {MenuItem, Select} from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select';
+import { Link, useNavigate } from 'react-router-dom'
+
 
 export default function Login(){
     return(
@@ -29,7 +31,7 @@ export default function Login(){
                         <TextField type='password' sx={{width: '100%'}} label="Password"></TextField>
                     </FormControl>
                 </div>
-                <div className='d-flex justify-content-center mt-5'>
+                <div className='d-flex justify-content-center gap-2 mt-5'>
                 <Button size='medium' variant="contained">Login</Button>
                 </div>
                 <div className='mt-2'>

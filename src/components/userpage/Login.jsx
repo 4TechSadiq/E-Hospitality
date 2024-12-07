@@ -35,6 +35,7 @@ export default function Login(){
                 <div className='mt-2'>
                     <a href='#'>
                         <Typography className='text-center'>Already have an account?</Typography>
+                        <Typography className='text-center'><Link to='Dashboard/'>DoctorDashboard</Link></Typography>
                     </a>
                 </div>
                 </form>

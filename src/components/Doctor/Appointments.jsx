@@ -2,6 +2,7 @@ import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import { Typography, Button } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom'
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -26,13 +27,14 @@ const columns = [
     headerName: 'Action',
     width: 150,
     renderCell: (params) => (
+      <Link to='appointments'>
       <Button
         variant="contained"
         color="primary"
-        onClick={() => handleActionClick(params.row)}
       >
-        Action
+        Open
       </Button>
+      </Link>
     ),
   },
 ];

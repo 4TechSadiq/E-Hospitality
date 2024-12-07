@@ -101,7 +101,7 @@ export default function DoctorDashboard(props) {
                 </Container>
               </Grid>
               <Grid size={12}>
-                <PatientModule />
+                {/* <PatientModule /> */}
               </Grid>
             </Grid>
           </>
