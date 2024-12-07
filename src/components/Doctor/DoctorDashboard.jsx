@@ -11,8 +11,6 @@ import PatientModule from './PatientModule';
 import PrescriptionTable from './PrescriptionTable';
 import { Box, Button, Container, Grid2, Typography } from '@mui/material';
 
-
-
 const NAVIGATION = [
   {
     kind: 'header',
@@ -63,45 +61,52 @@ export default function DoctorDashboard(props) {
 
   const router = useDemoRouter('/dashboard');
 
-  // Get the current page from the router
-  const currentPage = router.pathname;
+  const [selectedPatient, setSelectedPatient] = React.useState(null);
 
-  // Demo window handling
-  const demoWindow = window ? window() : undefined;
+  const handleOpenPatient = (patientId) => {
+    setSelectedPatient(patientId);
+  };
 
-  // Render the correct component based on the current page
   const renderContent = () => {
-    switch (currentPage) {
+    switch (router.pathname) {
       case '/dashboard':
         return (
           <>
             <Grid container spacing={1}>
-              <Grid size={5} />
               <Grid size={12}>
                 <Box display="flex" gap={2}>
-                  <Typography variant='h5' className=''>Status:</Typography>
-                  <Typography variant='h5' className='text-danger'>Offline</Typography>
+                  <Typography variant="h5">Status:</Typography>
+                  <Typography variant="h5" className="text-danger">
+                    Offline
+                  </Typography>
                 </Box>
-                <Appointments />
-                <Container >
-                  <Grid2 container className='mt-3 d-flex justify-content-center' spacing={2}>
+                {selectedPatient ? (
+                  <PatientModule patientId={selectedPatient} />
+                ) : (
+                  <Appointments onOpenPatient={handleOpenPatient} />
+                )}
+                <Container>
+                  <Grid2 container className="mt-3 d-flex justify-content-center" spacing={2}>
                     <Grid2 size={3}>
-                      <Typography textAlign="center" variant='h6'>Go Pause</Typography>
+                      <Typography textAlign="center" variant="h6">
+                        Go Pause
+                      </Typography>
                       <Box display="flex" justifyContent="center">
-                        <Button style={{background: "#DE3163	"}} variant='contained'>Pause</Button>
+                        <Button style={{ background: '#DE3163' }} variant="contained">
+                          Pause
+                        </Button>
                       </Box>
                     </Grid2>
                     <Grid2 size={3}>
-                      <Typography textAlign="center" variant='h6'>Go Offline</Typography>
+                      <Typography textAlign="center" variant="h6">
+                        Go Offline
+                      </Typography>
                       <Box display="flex" justifyContent="center">
-                        <Button variant='contained'>Offine</Button>
+                        <Button variant="contained">Offline</Button>
                       </Box>
                     </Grid2>
                   </Grid2>
                 </Container>
-              </Grid>
-              <Grid size={12}>
-                {/* <PatientModule /> */}
               </Grid>
             </Grid>
           </>
@@ -114,12 +119,7 @@ export default function DoctorDashboard(props) {
   };
 
   return (
-    <AppProvider
-      navigation={NAVIGATION}
-      router={router}
-      theme={demoTheme}
-      window={demoWindow}
-    >
+    <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}>
       <DashboardLayout>
         <PageContainer>{renderContent()}</PageContainer>
       </DashboardLayout>

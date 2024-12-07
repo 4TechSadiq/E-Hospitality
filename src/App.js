@@ -18,9 +18,8 @@ function App() {
           <Routes>
              <Route path='/' element={<Login/>}></Route>
              <Route path='/UserDashboard' element={<Dashboard/>}/>
-             <Route path='/DoctorDashboard'>
-              <Route index={true} element={<DoctorDashboard/>}></Route>
-              <Route path="appointments" element={<PatientModule/>}></Route>
+             <Route path='/DoctorDashboard' element={<DoctorDashboard/>}>
+              <Route path=":section" element={<DoctorDashboard/>}></Route>
              </Route>
              <Route></Route>
           </Routes>
