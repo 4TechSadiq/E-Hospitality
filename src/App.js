@@ -8,12 +8,14 @@ import Password from "./components/userpage/Password";
 import SignUp from "./components/userpage/SignUp";
 import AppointmentForm from "./components/userpage/AppointmentForm";
 
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/apform" element={<AppointmentForm/>}></Route>
+        <Route path="/AppointmentForm" element={<AppointmentForm/>}></Route>
         <Route path="/" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/UserDashboard" element={<Dashboard />} />
         <Route path="/DoctorDashboard" element={<DoctorDashboard />}>
           <Route path="patient/:patientId" element={<PatientModule />} />

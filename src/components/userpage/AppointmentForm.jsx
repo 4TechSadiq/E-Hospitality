@@ -3,6 +3,7 @@ import React from 'react'
 import Box from '@mui/material/Box'
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
 import { styled } from '@mui/system';
+import Appbar from './Appbar';
 
 
 function AppointmentForm() {
@@ -59,9 +60,11 @@ function AppointmentForm() {
       `,
       );
   return (
+    
     <Container>
+        
         <Typography className='mb-4 mt-4' variant='h4'>Appointment details</Typography>
-        <Box sx={{ flexGrow: 1 }} className='p-1' component="form">
+        <Box sx={{ flexGrow: 1 }} padding={2} className='p-1' component="form">
             <Grid2 container spacing={2}>
                 <Grid2 size={4}>
                     <TextField fullWidth required label="Firstname"/>
@@ -91,10 +94,10 @@ function AppointmentForm() {
                 />
                 </Grid2>
                 <Container className='d-flex justify-content-end gap-2'>
-                    <Grid2 size={1}>
+                    <Grid2 size={2}>
                         <Button type='reset' sx={{background:"#FD1919FF"}} variant='contained'>Clear</Button>
                     </Grid2>
-                    <Grid2 size={1}>
+                    <Grid2 size={2}>
                         <Button variant='contained'>Submit</Button>
                     </Grid2>
                 </Container>

@@ -77,7 +77,7 @@ const Appbar = ({ onSelectSection }) => {
                             <Button color="inherit" onClick={() => handleMenuClick('Consult')}>Consult Doctor</Button>
                             <Button color="inherit" onClick={() => handleMenuClick('MedicalHistory')}>Medical History</Button>
                             <Button color="inherit" onClick={() => handleMenuClick('Resources')}>Medical Resources</Button>
-                            <Button color="inherit" onClick={() => handleMenuClick('Logout')}>Logout</Button>
+                            <Button color="inherit" onClick={() => handleMenuClick('Logout')}>Logout</Button> 
                         </>
                     )}
 

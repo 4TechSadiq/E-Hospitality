@@ -19,7 +19,7 @@ export default function Login(){
             <Container className=''>
                 <Typography className='text-center mt-4' variant='h2'>E-Hospitality</Typography>
                 <div className='mt-3 p-4'>
-                <Typography className='text-' variant='h5'>Login-Doctor Portal</Typography>
+                <Typography className='text-' variant='h5'>Login</Typography>
                 <form>
                 <div className='mb-3 mt-4'>
                     <FormControl sx={{width: '100%'}}>
@@ -33,6 +33,11 @@ export default function Login(){
                 </div>
                 <div className='d-flex justify-content-center gap-2 mt-5'>
                 <Button size='medium' variant="contained">Login</Button>
+                </div>
+                <div className='mt-2'>
+                    <a href='signup'>
+                        <Typography className='text-center'>Don't have Account? SignUp</Typography>
+                    </a>
                 </div>
                 <div className='mt-2'>
                     <a href='#'>

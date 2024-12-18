@@ -5,8 +5,15 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import AppointmentModal from '../Doctor/AppointmentModal';
 
 export default function Slider() {
+  const navigate = useNavigate()
+  const handleNavigate = () =>{
+    navigate("/AppointmentForm")
+  }
   return (
     <Card sx={{maxWidth: 340 }} className='mt-4'>
       <CardActionArea className='d-flex'>
@@ -25,7 +32,9 @@ export default function Slider() {
             Apollo Hospital - Chennai
             Experianced - 5 years
           </Typography>
-          <Button variant='contained'>Book</Button>
+            <AppointmentModal/>
+           {/* <Button onClick={handleNavigate} variant='contained'>Book</Button> */}
+          
         </CardContent>
       </CardActionArea>
     </Card>

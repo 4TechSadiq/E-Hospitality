@@ -15,30 +15,28 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Container } from '@mui/material';
 
 function createData(
-  name,
-  calories,
-  fat,
-  carbs,
-  protein,
-  price,
+  condition: string,
+  severity: string,
+  medication: string,
+  doctor: string,
+  status: string
 ) {
   return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    price,
+    condition,
+    severity,
+    medication,
+    doctor,
+    status,
     history: [
       {
-        date: '2020-01-05',
-        customerId: '11091700',
-        amount: 3,
+        date: '2024-06-01',
+        remarks: 'Initial diagnosis',
+        outcome: 'Ongoing treatment',
       },
       {
-        date: '2020-01-02',
-        customerId: 'Anonymous',
-        amount: 1,
+        date: '2024-06-15',
+        remarks: 'Follow-up visit',
+        outcome: 'Improvement observed',
       },
     ],
   };
@@ -61,40 +59,34 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.name}
+          {row.condition}
         </TableCell>
-        <TableCell align="right">{row.calories}</TableCell>
-        <TableCell align="right">{row.fat}</TableCell>
-        <TableCell align="right">{row.carbs}</TableCell>
-        <TableCell align="right">{row.protein}</TableCell>
+        <TableCell>{row.severity}</TableCell>
+        <TableCell>{row.medication}</TableCell>
+        <TableCell>{row.doctor}</TableCell>
+        <TableCell>{row.status}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
-                History
+                Treatment History
               </Typography>
-              <Table size="small" aria-label="purchases">
+              <Table size="small" aria-label="history">
                 <TableHead>
                   <TableRow>
                     <TableCell>Date</TableCell>
-                    <TableCell>Customer</TableCell>
-                    <TableCell align="right">Amount</TableCell>
-                    <TableCell align="right">Total price ($)</TableCell>
+                    <TableCell>Remarks</TableCell>
+                    <TableCell>Outcome</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {row.history.map((historyRow) => (
                     <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align="right">{historyRow.amount}</TableCell>
-                      <TableCell align="right">
-                        {Math.round(historyRow.amount * row.price * 100) / 100}
-                      </TableCell>
+                      <TableCell>{historyRow.date}</TableCell>
+                      <TableCell>{historyRow.remarks}</TableCell>
+                      <TableCell>{historyRow.outcome}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -108,37 +100,38 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 }
 
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0, 3.99),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 4.99),
-  createData('Eclair', 262, 16.0, 24, 6.0, 3.79),
-  createData('Cupcake', 305, 3.7, 67, 4.3, 2.5),
-  createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
+  createData('Diabetes', 'Moderate', 'Metformin 500mg', 'Dr. Rajesh Kumar', 'Under Treatment'),
+  createData('Hypertension', 'Severe', 'Amlodipine 5mg', 'Dr. Sneha Gupta', 'Ongoing'),
+  createData('Asthma', 'Moderate', 'Inhaler', 'Dr. Manish Verma', 'Stable'),
+  createData('Viral Fever', 'Mild', 'Paracetamol 500mg', 'Dr. Anita Sharma', 'Resolved'),
 ];
 
 export default function History() {
   return (
     <>
-    <Container  className='mt-4 mb-5 flex-wrap'>
-    <Typography variant='h4'>Medical History</Typography>
-      <TableContainer className='mt-4' component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell>Dessert (100g serving)</TableCell>
-              <TableCell align="right">Calories</TableCell>
-              <TableCell align="right">Fat&nbsp;(g)</TableCell>
-              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-              <TableCell align="right">Protein&nbsp;(g)</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <Row key={row.name} row={row} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Container className="mt-4 mb-5 flex-wrap">
+        <Typography variant="h4" gutterBottom>
+          Medical History
+        </Typography>
+        <TableContainer className="mt-4" component={Paper}>
+          <Table aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <TableCell />
+                <TableCell>Condition</TableCell>
+                <TableCell>Severity</TableCell>
+                <TableCell>Medication</TableCell>
+                <TableCell>Doctor</TableCell>
+                <TableCell>Status</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <Row key={row.condition} row={row} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Container>
     </>
   );

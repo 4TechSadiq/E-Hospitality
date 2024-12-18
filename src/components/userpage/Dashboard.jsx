@@ -5,6 +5,7 @@ import Consult from "./Consult";
 import UserPage from "./UserPage";
 import Resource from "./Resources";
 import History from "./History";
+import AppointmentForm from "./AppointmentForm";
 
 export default function Dashboard() {
     const [activeSection, setActiveSection] = useState('UserPage'); // Default to UserPage
@@ -17,6 +18,8 @@ export default function Dashboard() {
                 return <History />;
             case 'Resources':
                 return <Resource />;
+            case 'AppointmentForm':
+                return <AppointmentForm/>
             case 'UserPage':
             default:
                 return <UserPage />;

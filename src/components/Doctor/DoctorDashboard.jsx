@@ -9,7 +9,17 @@ import Grid from "@mui/material/Grid";
 import Appointments from "./Appointments";
 import PatientModule from "./PatientModule";
 import Histories from "./Histories";
-import { Box, Button, Container, Typography } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Box,
+  Button,
+  Container,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const NAVIGATION = [
   {
@@ -54,6 +64,24 @@ function useDemoRouter(initialPath) {
   }, [pathname]);
 
   return router;
+}
+
+function CustomAppBar() {
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <IconButton edge="start" color="inherit" aria-label="menu">
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          Doctor's Portal
+        </Typography>
+        <IconButton color="inherit">
+          <SettingsIcon />
+        </IconButton>
+      </Toolbar>
+    </AppBar>
+  );
 }
 
 export default function DoctorDashboard(props) {
@@ -129,7 +157,7 @@ export default function DoctorDashboard(props) {
 
   return (
     <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}>
-      <DashboardLayout>
+      <DashboardLayout appBar={<CustomAppBar />}> {/* Use Custom Toolbar */}
         <PageContainer>{renderContent()}</PageContainer>
       </DashboardLayout>
     </AppProvider>

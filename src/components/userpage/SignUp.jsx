@@ -7,8 +7,18 @@ import {Box} from '@mui/material'
 import {TextField } from '@mui/material'
 import {MenuItem, Select} from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select';
+import { useState } from 'react'
 
 export default function SignUp(){
+
+    const[formData,setFormData] = useState({})
+    const handleInput = (e) => {
+        const{name,value} = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        })
+    }
     return(
         <Container className='d-flex rounded-5 shadow p-4 ' sx={{background:'#F7F9F2', marginTop: '10vh'}} maxWidth="lg">
             <Container className=''>
@@ -24,10 +34,10 @@ export default function SignUp(){
                 <FormControl fullWidth>
                     <Grid2 container item xs={12} spacing={2}>
                     <Grid2 item size={{xs:6}}>
-                        <TextField sx={{width: '100%'}} label="First Name" fullWidth />
+                        <TextField sx={{width: '100%'}} label="First Name" onChange={handleInput} fullWidth />
                     </Grid2>
                     <Grid2 item size={{xs:6}}>
-                        <TextField sx={{width: '100%'}} label="Last Name" fullWidth />
+                        <TextField onChange={handleInput} sx={{width: '100%'}} label="Last Name" fullWidth />
                     </Grid2>
                     </Grid2>
                 </FormControl>
@@ -38,6 +48,7 @@ export default function SignUp(){
                     <Grid2 item size={{xs:7}}>
                     <TextField
                         type="number"
+                        onChange={handleInput}
                         label="Phone No"
                         sx={{
                         width: '100%',
@@ -53,11 +64,12 @@ export default function SignUp(){
                     </Grid2>
                         <Grid2 size={{xs:5}}>
                         <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+                        <InputLabel onChange={handleInput} id="demo-simple-select-label">Gender</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             label="Gender"
+                            onChange={handleInput}
                         >
                             <MenuItem value={10}>Male</MenuItem>
                             <MenuItem value={20}>Female</MenuItem>
@@ -69,8 +81,33 @@ export default function SignUp(){
                 </div>
                 <div className='mb-3 mt-4'>
                     <FormControl sx={{width: '100%'}}>
-                        <TextField type='email' sx={{width: '100%'}} label="Email ID"></TextField>
+                        <TextField onChange={handleInput} type='email' sx={{width: '100%'}} label="Address"></TextField>
                     </FormControl>
+                </div>
+                <div className='mb-3 mt-4'>
+                    <FormControl sx={{width: '100%'}}>
+                        {/* <TextField type='file' className='form-control' sx={{width: '100%'}} label=""></TextField> */}
+                        <input onChange={handleInput} type='file' className='form-control' />
+                    </FormControl>
+                </div>
+                <div className='mb-3 mt-4'>
+                    <FormControl sx={{width: '100%'}}>
+                        <TextField onChange={handleInput} type='email' sx={{width: '100%'}} label="Email ID"></TextField>
+                    </FormControl>
+                </div>
+                <div className='mb-3 mt-3'>
+                <Grid2 container spacing={2} alignItems="center">
+                <FormControl fullWidth>
+                    <Grid2 container item xs={12} spacing={2}>
+                    <Grid2 item size={{xs:6}}>
+                        <TextField onChange={handleInput} sx={{width: '100%'}} label="Password" fullWidth />
+                    </Grid2>
+                    <Grid2 item size={{xs:6}}>
+                        <TextField onChange={handleInput} sx={{width: '100%'}} label="Confirm Password" fullWidth />
+                    </Grid2>
+                    </Grid2>
+                </FormControl>
+                </Grid2>
                 </div>
                 <div className='d-flex justify-content-center'>
                 <Button size='medium' variant="contained">SignUp</Button>
