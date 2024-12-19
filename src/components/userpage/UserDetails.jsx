@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Typography } from '@mui/material';
 
 export default function ActionAreaCard() {
+  
   return (
     <>
         <div className='col-12 p-5 shadow rounded d-flex'>

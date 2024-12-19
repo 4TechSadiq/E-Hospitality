@@ -7,8 +7,10 @@ import {Box} from '@mui/material'
 import {TextField } from '@mui/material'
 import {MenuItem, Select} from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select';
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Login(){
+    
     return(
         <Container className='d-flex rounded-5 shadow p-4 ' sx={{background:'#F7F9F2', marginTop: '10vh'}} maxWidth="lg">
             <Container className=''>
@@ -33,9 +35,13 @@ export default function Login(){
                 <Button size='medium' variant="contained">Login</Button>
                 </div>
                 <div className='mt-2'>
+                    <a href='signup'>
+                        <Typography className='text-center'>Don't have Account? SignUp</Typography>
+                    </a>
+                </div>
+                <div className='mt-2'>
                     <a href='#'>
-                        <Typography className='text-center'>Already have an account?</Typography>
-                        <Typography className='text-center'><Link to='Dashboard/'>DoctorDashboard</Link></Typography>
+                        <Typography className='text-center'><Link to='/Doc-login'>DoctorDashboard</Link></Typography>
                     </a>
                 </div>
                 </form>

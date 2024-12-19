@@ -1,12 +1,13 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./components/Doctor/Login";
+import DoctorLogin from "./components/Doctor/DoctorLogin";
 import Dashboard from "./components/userpage/Dashboard";
 import DoctorDashboard from "./components/Doctor/DoctorDashboard";
 import PatientModule from "./components/Doctor/PatientModule";
 import Password from "./components/userpage/Password";
 import SignUp from "./components/userpage/SignUp";
 import AppointmentForm from "./components/userpage/AppointmentForm";
+import Login from "./components/userpage/Login";
 
 
 function App() {
@@ -14,7 +15,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/AppointmentForm" element={<AppointmentForm/>}></Route>
-        <Route path="/" element={<Login />} />
+        <Route path="/Doc-login" element={<DoctorLogin />} />
+        <Route path="/" element={<Login/>} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/UserDashboard/:user_id" element={<Dashboard />} />
         <Route path="/DoctorDashboard" element={<DoctorDashboard />}>
