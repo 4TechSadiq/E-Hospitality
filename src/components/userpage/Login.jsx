@@ -8,9 +8,34 @@ import {TextField } from '@mui/material'
 import {MenuItem, Select} from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 export default function Login(){
-    
+    const [formData, setFormData] = useState({})
+    const navigate = useNavigate()
+
+    const handleInput = (e) => {
+        e.preventDefault();
+        const{name, value}= e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        })
+        console.log(formData)
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        try{
+            const response = await fetch("http://127.0.0.1:8000/list-users",{
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json',
+                }
+                body: JSON.stringify(formData)
+            })
+        }
+    }
     return(
         <Container className='d-flex rounded-5 shadow p-4 ' sx={{background:'#F7F9F2', marginTop: '10vh'}} maxWidth="lg">
             <Container className=''>
@@ -23,12 +48,12 @@ export default function Login(){
                 <form>
                 <div className='mb-3 mt-4'>
                     <FormControl sx={{width: '100%'}}>
-                        <TextField type='email' sx={{width: '100%'}} label="Email ID"></TextField>
+                        <TextField onChange={handleInput} name='email' type='email' sx={{width: '100%'}} label="Email ID"></TextField>
                     </FormControl>
                 </div>
                 <div className='mb-3 mt-4'>
                     <FormControl sx={{width: '100%'}}>
-                        <TextField type='password' sx={{width: '100%'}} label="Password"></TextField>
+                        <TextField onChange={handleInput} name='password' type='password' sx={{width: '100%'}} label="Password"></TextField>
                     </FormControl>
                 </div>
                 <div className='d-flex justify-content-center mt-5'>
