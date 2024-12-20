@@ -1,78 +1,120 @@
 import * as React from 'react'
-import { FormControl,Input, FormLabel, InputLabel, FormHelperText } from '@mui/material'
-import {Typography} from '@mui/material'
-import {Container, Button} from '@mui/material'
-import {Grid2} from '@mui/material'
-import {Box} from '@mui/material'
-import {TextField } from '@mui/material'
-import {MenuItem, Select} from '@mui/material'
-import { SelectChangeEvent } from '@mui/material/Select';
+import { FormControl, TextField, Typography, Container, Button } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
-export default function Login(){
-    const [formData, setFormData] = useState({})
-    const navigate = useNavigate()
+export default function Login() {
+    const [formData, setFormData] = useState({ email: '', password: '' });
+    const navigate = useNavigate();
 
+    // Handle Input Change
     const handleInput = (e) => {
-        e.preventDefault();
-        const{name, value}= e.target;
+        const { name, value } = e.target;
         setFormData({
             ...formData,
             [name]: value
-        })
-        console.log(formData)
-    }
-    const handleSubmit = (e) => {
+        });
+    };
+
+    // Handle Form Submit
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try{
-            const response = await fetch("http://127.0.0.1:8000/list-users",{
+        try {
+            const response = await fetch("http://127.0.0.1:8000/login-user/", {
                 method: 'POST',
-                header: {
+                headers: {
                     'Content-Type': 'application/json',
-                }
+                },
                 body: JSON.stringify(formData)
-            })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                toast.success("Login Successful: " + formData.email, {
+                    position: 'top-center',
+                    theme: "colored"
+                });
+                navigate(`/UserDashboard/${result.id}`);
+            } else {
+                const error = await response.json();
+                toast.error(error.error || "Invalid credentials", {
+                    position: 'top-center',
+                    theme: "colored"
+                });
+            }
+        } catch (err) {
+            console.error("Error:", err);
+            toast.error("Server Error. Please try again later.", {
+                position: 'top-center',
+                theme: "colored"
+            });
         }
-    }
-    return(
-        <Container className='d-flex rounded-5 shadow p-4 ' sx={{background:'#F7F9F2', marginTop: '10vh'}} maxWidth="lg">
+    };
+
+    return (
+        <Container className='d-flex rounded-5 shadow p-4' sx={{ background: '#F7F9F2', marginTop: '10vh' }} maxWidth="lg">
+            <ToastContainer />
             <Container className=''>
-                <img className='img-fluid mt-3 mb-3' style={{borderRadius: '10px', height:'30em'}} src="https://media.licdn.com/dms/image/C5612AQGJi9QozuNXHQ/article-cover_image-shrink_720_1280/0/1595043879529?e=2147483647&v=beta&t=pTPR5LKSljMEzYk8QHzT5Oqq9u0xekAVWKLL6mip_Jg" alt="" />
+                <img 
+                    className='img-fluid mt-3 mb-3' 
+                    style={{ borderRadius: '10px', height: '30em' }} 
+                    src="https://media.licdn.com/dms/image/C5612AQGJi9QozuNXHQ/article-cover_image-shrink_720_1280/0/1595043879529?e=2147483647&v=beta&t=pTPR5LKSljMEzYk8QHzT5Oqq9u0xekAVWKLL6mip_Jg" 
+                    alt="E-Hospitality" 
+                />
             </Container>
+
             <Container className=''>
                 <Typography className='text-center mt-4' variant='h2'>E-Hospitality</Typography>
                 <div className='mt-3 p-4'>
-                <Typography className='text-' variant='h5'>Login</Typography>
-                <form>
-                <div className='mb-3 mt-4'>
-                    <FormControl sx={{width: '100%'}}>
-                        <TextField onChange={handleInput} name='email' type='email' sx={{width: '100%'}} label="Email ID"></TextField>
-                    </FormControl>
-                </div>
-                <div className='mb-3 mt-4'>
-                    <FormControl sx={{width: '100%'}}>
-                        <TextField onChange={handleInput} name='password' type='password' sx={{width: '100%'}} label="Password"></TextField>
-                    </FormControl>
-                </div>
-                <div className='d-flex justify-content-center mt-5'>
-                <Button size='medium' variant="contained">Login</Button>
-                </div>
-                <div className='mt-2'>
-                    <a href='signup'>
-                        <Typography className='text-center'>Don't have Account? SignUp</Typography>
-                    </a>
-                </div>
-                <div className='mt-2'>
-                    <a href='#'>
-                        <Typography className='text-center'><Link to='/Doc-login'>DoctorDashboard</Link></Typography>
-                    </a>
-                </div>
-                </form>
+                    <Typography variant='h5'>Login</Typography>
+                    <form onSubmit={handleSubmit}>
+                        <div className='mb-3 mt-4'>
+                            <FormControl sx={{ width: '100%' }}>
+                                <TextField 
+                                    onChange={handleInput} 
+                                    name='email' 
+                                    type='email' 
+                                    label="Email ID" 
+                                    required 
+                                    sx={{ width: '100%' }} 
+                                />
+                            </FormControl>
+                        </div>
+
+                        <div className='mb-3 mt-4'>
+                            <FormControl sx={{ width: '100%' }}>
+                                <TextField 
+                                    onChange={handleInput} 
+                                    name='password' 
+                                    type='password' 
+                                    label="Password" 
+                                    required 
+                                    sx={{ width: '100%' }} 
+                                />
+                            </FormControl>
+                        </div>
+
+                        <div className='d-flex justify-content-center mt-5'>
+                            <Button size='medium' type='submit' variant="contained">Login</Button>
+                        </div>
+
+                        <div className='mt-2'>
+                            <Typography className='text-center'>
+                                Don't have an account? <Link to='/signup'>SignUp</Link>
+                            </Typography>
+                        </div>
+
+                        <div className='mt-2'>
+                            <Typography className='text-center'>
+                                <Link to='/Doc-login'>Doctor Dashboard</Link>
+                            </Typography>
+                        </div>
+                    </form>
                 </div>
             </Container>
         </Container>
-    )
-
+    );
 }

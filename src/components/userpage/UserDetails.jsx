@@ -1,8 +1,22 @@
 import * as React from 'react';
 import { Typography } from '@mui/material';
+import { useState,useEffect } from 'react';
+import axios from 'axios';
 
 export default function ActionAreaCard() {
-  
+  const [data,setData] = useState([]);
+  try{
+    useEffect(()=>{
+      axios.get('http://127.0.0.1:8000/user/{id}/').then(
+        (response)=>{
+          setData(response.data)
+        }
+      )
+    })
+  }catch(err){
+    console.error("Error:", err);
+  }
+
   return (
     <>
         <div className='col-12 p-5 shadow rounded d-flex'>
