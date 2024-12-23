@@ -29,8 +29,9 @@ export default function UserDetails({ userId }) {
     <div className="col-12 p-5 shadow rounded d-flex">
       <div>
         <img
-          className="user-avatar"
-          src={data.image || "https://via.placeholder.com/150"}
+          className="user-avatar rounded-circle"
+          style={{ width: "150px", height: "150px" }}
+          src={data.profile || "https://via.placeholder.com/150"}
           alt="User Avatar"
         />
       </div>
