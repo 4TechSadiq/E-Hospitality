@@ -1,28 +1,35 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import DoctorLogin from "./components/Doctor/DoctorLogin";
 import Dashboard from "./components/userpage/Dashboard";
 import DoctorDashboard from "./components/Doctor/DoctorDashboard";
 import PatientModule from "./components/Doctor/PatientModule";
-import Password from "./components/userpage/Password";
 import SignUp from "./components/userpage/SignUp";
 import AppointmentForm from "./components/userpage/AppointmentForm";
 import Login from "./components/userpage/Login";
+import UserPage from "./components/userpage/UserPage";
 
+const NotFound = () => (
+  <div style={{ textAlign: "center", marginTop: "50px" }}>
+    <h1>404</h1>
+    <p>Page Not Found</p>
+  </div>
+);
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/AppointmentForm" element={<AppointmentForm/>}></Route>
-        <Route path="/Doc-login" element={<DoctorLogin />} />
-        <Route path="/" element={<Login/>} />
+        <Route path="/" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/UserDashboard/:user_id" element={<Dashboard />} />
+        <Route path="/AppointmentForm" element={<AppointmentForm />} />
+        <Route path="/Doc-login" element={<DoctorLogin />} />
+        <Route path="/user/:userId" element={<UserPage />} />
+        <Route path="/UserDashboard/:userId" element={<Dashboard />} />
         <Route path="/DoctorDashboard" element={<DoctorDashboard />}>
           <Route path="patient/:patientId" element={<PatientModule />} />
         </Route>
-        <Route path="*" element={<div>404 - Page Not Found</div>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
