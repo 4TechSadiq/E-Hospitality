@@ -1,19 +1,40 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import Slider from "./Slider";
-import { Typography, Box } from "@mui/material";
-import Pie from "./Pie";
-import Bar from "./Bar";
-import UserDetails from "./UserDetails";
-import History from "./History";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { Typography, Box } from '@mui/material';
+import axios from 'axios';
+import Slider from './Slider';
+import Pie from './Pie';
+import Bar from './Bar';
+import UserDetails from './UserDetails';
+import History from './History';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 
 export default function UserPage() {
-  const { userId } = useParams(); // Extract userId from URL
+  const { userId } = useParams();
+  const [doctors, setDoctors] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/create-doctor');
+        setDoctors(Array.isArray(response.data) ? response.data : [response.data]);
+      } catch (err) {
+        console.error('Error fetching doctor data:', err);
+        setError('Failed to load doctor data.');
+      }
+    };
+
+    fetchDoctors();
+  }, []);
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
+  }
 
   return (
     <>
@@ -24,8 +45,8 @@ export default function UserPage() {
       <div className="container d-flex flex-wrap">
         <Box
           sx={{
-            flexBasis: { xs: "100%", md: "50%" },
-            maxWidth: { xs: "100%", md: "50%" },
+            flexBasis: { xs: '100%', md: '50%' },
+            maxWidth: { xs: '100%', md: '50%' },
           }}
           className="mt-4 mb-2"
         >
@@ -34,8 +55,8 @@ export default function UserPage() {
         </Box>
         <Box
           sx={{
-            flexBasis: { xs: "100%", md: "50%" },
-            maxWidth: { xs: "100%", md: "50%" },
+            flexBasis: { xs: '100%', md: '50%' },
+            maxWidth: { xs: '100%', md: '50%' },
           }}
           className="mt-4 mb-2"
         >
@@ -71,24 +92,11 @@ export default function UserPage() {
               1024: { slidesPerView: 3 },
             }}
           >
-            <SwiperSlide>
-              <Slider />
-            </SwiperSlide>
-            <SwiperSlide>
-              <Slider />
-            </SwiperSlide>
-            <SwiperSlide>
-              <Slider />
-            </SwiperSlide>
-            <SwiperSlide>
-              <Slider />
-            </SwiperSlide>
-            <SwiperSlide>
-              <Slider />
-            </SwiperSlide>
-            <SwiperSlide>
-              <Slider />
-            </SwiperSlide>
+            {doctors.map((doctor) => (
+              <SwiperSlide key={doctor.id}>
+                <Slider doctor={doctor} />
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       </div>
