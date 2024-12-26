@@ -1,111 +1,174 @@
-import { Button, Container, Grid2, TextareaAutosize, TextField, Typography } from '@mui/material'
-import React from 'react'
-import Box from '@mui/material/Box'
-import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
-import { styled } from '@mui/system';
-import Appbar from './Appbar';
+import React, { useState, useEffect } from 'react';
+import { Button, Container, Grid2, TextField, Typography, Box } from '@mui/material';
+import axios from 'axios';
 
+function AppointmentForm({ doc_id,user_id }) {
+  const [formData, setFormData] = useState({
+    first_name: '',
+    mid_name: '',
+    last_name: '',
+    phone: '',
+    email: '',
+    disease: '',
+    description: '',
+    doc_id: '', // Default to an empty string
+    user_id: '', // Default to an empty string
+  });
 
-function AppointmentForm() {
-    const blue = {
-        100: '#DAECFF',
-        200: '#b6daff',
-        400: '#3399FF',
-        500: '#007FFF',
-        600: '#0072E5',
-        900: '#003A75',
-      };
-    
-      const grey = {
-        50: '#F3F6F9',
-        100: '#E5EAF2',
-        200: '#DAE2ED',
-        300: '#C7D0DD',
-        400: '#B0B8C4',
-        500: '#9DA8B7',
-        600: '#6B7A90',
-        700: '#434D5B',
-        800: '#303740',
-        900: '#1C2025',
-      };
-    
-      const Textarea = styled(BaseTextareaAutosize)(
-        ({ theme }) => `
-        box-sizing: border-box;
-        width: 320px;
-        font-family: 'IBM Plex Sans', sans-serif;
-        font-size: 0.875rem;
-        font-weight: 400;
-        line-height: 1.5;
-        padding: 8px 12px;
-        border-radius: 8px;
-        color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-        background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-        border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-        box-shadow: 0 2px 2px ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
-    
-        &:hover {
-          border-color: ${blue[400]};
-        }
-    
-        &:focus {
-          border-color: ${blue[400]};
-          box-shadow: 0 0 0 3px ${theme.palette.mode === 'dark' ? blue[600] : blue[200]};
-        }
-    
-        /* firefox */
-        &:focus-visible {
-          outline: 0;
-        }
-      `,
-      );
+  useEffect(() => {
+    if (doc_id) {
+      // Set the doc_id once it is available
+      setFormData((prev) => ({
+        ...prev,
+        doc_id, // Update doc_id if it's passed as a prop
+      }));
+    }
+  }, [doc_id]); // Re-run this effect if doc_id changes
+
+  useEffect(() => {
+    if (user_id) {
+      // Set the doc_id once it is available
+      setFormData((prev) => ({
+        ...prev,
+        user_id, // Update doc_id if it's passed as a prop
+      }));
+    }
+  }, [user_id]);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+  console.log(formData);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const ap_id = `AP-${Math.floor(1000 + Math.random() * 9000)}`; // Generate appointment ID
+
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/create-appointment', {
+        ...formData,
+        ap_id,
+      });
+      alert('Appointment submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting appointment:', error);
+      alert('Failed to submit appointment. Please try again.');
+    }
+  };
+
+  const handleReset = () => {
+    setFormData({
+      first_name: '',
+      mid_name: '',
+      last_name: '',
+      phone: '',
+      email: '',
+      disease: '',
+      description: '',
+      doc_id: '', // Reset doc_id as well
+      user_id: '', // Reset user_id as well
+    });
+  };
+
   return (
-    
     <Container>
-        
-        <Typography className='mb-4 mt-4' variant='h4'>Appointment details</Typography>
-        <Box sx={{ flexGrow: 1 }} padding={2} className='p-1' component="form">
-            <Grid2 container spacing={2}>
-                <Grid2 size={4}>
-                    <TextField fullWidth required label="Firstname"/>
-                </Grid2>
-                <Grid2 size={4}>
-                    <TextField fullWidth label="Middle Name"/>
-                </Grid2>
-                <Grid2 size={4}>
-                    <TextField fullWidth required label="Last Name"/>
-                </Grid2>
-                <Grid2 className="mt-3" size={3}>
-                    <TextField fullWidth required label="Phone Number"/>
-                </Grid2>
-                <Grid2 className="mt-3" size={9}>
-                    <TextField fullWidth required label="Email ID"/>
-                </Grid2>
-                <Grid2 className="mt-3" size={4}>
-                    <TextField fullWidth  label="Disease"/>
-                </Grid2>
-                <Grid2 className="mt-3" size={12}>
-                <Textarea
-                    sx={{width:"100%",minHeight:"100px"}}
-                    maxRows={4}
-                    aria-label="maximum height"
-                    placeholder="Disease Description"
-                    defaultValue=""
-                />
-                </Grid2>
-                <Container className='d-flex justify-content-end gap-2'>
-                    <Grid2 size={2}>
-                        <Button type='reset' sx={{background:"#FD1919FF"}} variant='contained'>Clear</Button>
-                    </Grid2>
-                    <Grid2 size={2}>
-                        <Button variant='contained'>Submit</Button>
-                    </Grid2>
-                </Container>
-                
+      <Typography className="mb-4 mt-4" variant="h4">Appointment Details</Typography>
+      <Box
+        sx={{ flexGrow: 1 }}
+        padding={2}
+        className="p-1"
+        component="form"
+        onSubmit={handleSubmit}
+      >
+        <Grid2 container spacing={2}>
+          <Grid2 size={4}>
+            <TextField
+              fullWidth
+              required
+              label="First Name"
+              name="first_name"
+              value={formData.first_name}
+              onChange={handleInputChange}
+            />
+          </Grid2>
+          <Grid2 size={4}>
+            <TextField
+              fullWidth
+              label="Middle Name"
+              name="mid_name"
+              value={formData.mid_name}
+              onChange={handleInputChange}
+            />
+          </Grid2>
+          <Grid2 size={4}>
+            <TextField
+              fullWidth
+              required
+              label="Last Name"
+              name="last_name"
+              value={formData.last_name}
+              onChange={handleInputChange}
+            />
+          </Grid2>
+          <Grid2 size={3}>
+            <TextField
+              fullWidth
+              required
+              label="Phone Number"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+            />
+          </Grid2>
+          <Grid2 size={9}>
+            <TextField
+              fullWidth
+              required
+              label="Email ID"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+          </Grid2>
+          <Grid2 size={4}>
+            <TextField
+              fullWidth
+              label="Disease"
+              name="disease"
+              value={formData.disease}
+              onChange={handleInputChange}
+            />
+          </Grid2>
+          <Grid2 size={12}>
+            <TextField
+              fullWidth
+              label="Disease Description"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+            />
+          </Grid2>
+          <Container className="d-flex justify-content-end gap-2">
+            <Grid2 size={2}>
+              <Button
+                type="reset"
+                sx={{ background: '#FD1919FF' }}
+                variant="contained"
+                onClick={handleReset}
+              >
+                Clear
+              </Button>
             </Grid2>
-        </Box>
+            <Grid2 size={2}>
+              <Button type="submit" variant="contained">
+                Submit
+              </Button>
+            </Grid2>
+          </Container>
+        </Grid2>
+      </Box>
     </Container>
-  )
+  );
 }
 
-export default AppointmentForm
+export default AppointmentForm;

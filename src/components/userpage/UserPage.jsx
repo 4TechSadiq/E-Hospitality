@@ -22,6 +22,7 @@ export default function UserPage() {
     const fetchDoctors = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/create-doctor');
+        console.log('Doctors API response:', response.data);
         setDoctors(Array.isArray(response.data) ? response.data : [response.data]);
       } catch (err) {
         console.error('Error fetching doctor data:', err);
@@ -41,29 +42,6 @@ export default function UserPage() {
       <div className="container">
         <UserDetails userId={userId} />
       </div>
-
-      {/* <div className="container d-flex flex-wrap">
-        <Box
-          sx={{
-            flexBasis: { xs: '100%', md: '50%' },
-            maxWidth: { xs: '100%', md: '50%' },
-          }}
-          className="mt-4 mb-2"
-        >
-          <Typography variant="h6">Health Status</Typography>
-          <Pie />
-        </Box>
-        <Box
-          sx={{
-            flexBasis: { xs: '100%', md: '50%' },
-            maxWidth: { xs: '100%', md: '50%' },
-          }}
-          className="mt-4 mb-2"
-        >
-          <Typography variant="h6">Medication</Typography>
-          <Bar />
-        </Box>
-      </div> */}
 
       <div className="container">
         <div className="col-12 mt-4 mb-2">
@@ -92,11 +70,14 @@ export default function UserPage() {
               1024: { slidesPerView: 3 },
             }}
           >
-            {doctors.map((doctor) => (
-              <SwiperSlide key={doctor.id}>
-                <Slider doctor={doctor} />
-              </SwiperSlide>
-            ))}
+            {doctors.map((doctor) => {
+              console.log('Doctor in map:', doctor);
+              return (
+                <SwiperSlide key={doctor.id}>
+                  <Slider user_id={userId} doctor={doctor} />
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
         </div>
       </div>

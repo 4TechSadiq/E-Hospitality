@@ -4,9 +4,9 @@ import { styled, css } from '@mui/system';
 import { Modal as BaseModal } from '@mui/base/Modal';
 import { Button } from '@mui/base/Button';
 import { useSpring, animated } from '@react-spring/web';
-import AppointmentForm from '../userpage/AppointmentForm';
+import AppointmentForm from './AppointmentForm';
 
-export default function AppointmentModal() {
+export default function AppointmentModal({ doc_id,user_id }) { // Accept doctor prop here
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -24,13 +24,25 @@ export default function AppointmentModal() {
       >
         <Fade in={open}>
           <ModalContent sx={style}>
-            <AppointmentForm/>
+            {/* Pass doctor prop to AppointmentForm */}
+            <AppointmentForm doc_id={doc_id} user_id={user_id} />
           </ModalContent>
         </Fade>
       </Modal>
     </div>
   );
 }
+
+// Define PropTypes for AppointmentModal
+AppointmentModal.propTypes = {
+  doctor: PropTypes.shape({
+    doc_name: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    hospital: PropTypes.string.isRequired,
+    experience: PropTypes.number,
+    image: PropTypes.string,
+  }).isRequired,
+};
 
 const Backdrop = React.forwardRef((props, ref) => {
   const { open, ...other } = props;
