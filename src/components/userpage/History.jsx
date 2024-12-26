@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -14,40 +15,11 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Container } from '@mui/material';
 
-function createData(
-  condition: string,
-  severity: string,
-  medication: string,
-  doctor: string,
-  status: string
-) {
-  return {
-    condition,
-    severity,
-    medication,
-    doctor,
-    status,
-    history: [
-      {
-        date: '2024-06-01',
-        remarks: 'Initial diagnosis',
-        outcome: 'Ongoing treatment',
-      },
-      {
-        date: '2024-06-15',
-        remarks: 'Follow-up visit',
-        outcome: 'Improvement observed',
-      },
-    ],
-  };
-}
-
-function Row(props: { row: ReturnType<typeof createData> }) {
-  const { row } = props;
-  const [open, setOpen] = React.useState(false);
+function Row({ row }) {
+  const [open, setOpen] = useState(false);
 
   return (
-    <React.Fragment>
+    <>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell>
           <IconButton
@@ -58,12 +30,9 @@ function Row(props: { row: ReturnType<typeof createData> }) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
-          {row.condition}
-        </TableCell>
+        <TableCell component="th" scope="row">{row.condition}</TableCell>
         <TableCell>{row.severity}</TableCell>
         <TableCell>{row.medication}</TableCell>
-        <TableCell>{row.doctor}</TableCell>
         <TableCell>{row.status}</TableCell>
       </TableRow>
       <TableRow>
@@ -82,8 +51,8 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
+                  {(row.history || []).map((historyRow, index) => (
+                    <TableRow key={index}>
                       <TableCell>{historyRow.date}</TableCell>
                       <TableCell>{historyRow.remarks}</TableCell>
                       <TableCell>{historyRow.outcome}</TableCell>
@@ -95,44 +64,92 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           </Collapse>
         </TableCell>
       </TableRow>
-    </React.Fragment>
+    </>
   );
 }
 
-const rows = [
-  createData('Diabetes', 'Moderate', 'Metformin 500mg', 'Dr. Rajesh Kumar', 'Under Treatment'),
-  createData('Hypertension', 'Severe', 'Amlodipine 5mg', 'Dr. Sneha Gupta', 'Ongoing'),
-  createData('Asthma', 'Moderate', 'Inhaler', 'Dr. Manish Verma', 'Stable'),
-  createData('Viral Fever', 'Mild', 'Paracetamol 500mg', 'Dr. Anita Sharma', 'Resolved'),
-];
-
 export default function History() {
-  return (
-    <>
-      <Container className="mt-4 mb-5 flex-wrap">
-        <Typography variant="h4" gutterBottom>
-          Medical History
-        </Typography>
-        <TableContainer className="mt-4" component={Paper}>
-          <Table aria-label="collapsible table">
-            <TableHead>
-              <TableRow>
-                <TableCell />
-                <TableCell>Condition</TableCell>
-                <TableCell>Severity</TableCell>
-                <TableCell>Medication</TableCell>
-                <TableCell>Doctor</TableCell>
-                <TableCell>Status</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <Row key={row.condition} row={row} />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const conditionResponse = await axios.get('http://127.0.0.1:8000/list-med-condition', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+
+        const historyResponse = await axios.get('http://127.0.0.1:8000/list-treatment-history', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+
+        const conditions = conditionResponse.data;
+        const histories = historyResponse.data;
+
+        // Map histories to their corresponding medical conditions
+        const mergedData = conditions.map((condition) => ({
+          ...condition,
+          history: histories.filter((history) => history.medical_condition === condition.id),
+        }));
+
+        setRows(mergedData);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <Container>
+        <Typography variant="h6">Loading medical history...</Typography>
       </Container>
-    </>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container>
+        <Typography variant="h6" color="error">
+          Failed to load medical history.
+        </Typography>
+      </Container>
+    );
+  }
+
+  return (
+    <Container className="mt-4 mb-5 flex-wrap">
+      <Typography variant="h4" gutterBottom>
+        Medical History
+      </Typography>
+      <TableContainer className="mt-4" component={Paper}>
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell>Condition</TableCell>
+              <TableCell>Severity</TableCell>
+              <TableCell>Medication</TableCell>
+              <TableCell>Status</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row, index) => (
+              <Row key={index} row={row} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
   );
 }

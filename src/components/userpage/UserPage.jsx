@@ -42,7 +42,7 @@ export default function UserPage() {
         <UserDetails userId={userId} />
       </div>
 
-      <div className="container d-flex flex-wrap">
+      {/* <div className="container d-flex flex-wrap">
         <Box
           sx={{
             flexBasis: { xs: '100%', md: '50%' },
@@ -63,7 +63,7 @@ export default function UserPage() {
           <Typography variant="h6">Medication</Typography>
           <Bar />
         </Box>
-      </div>
+      </div> */}
 
       <div className="container">
         <div className="col-12 mt-4 mb-2">
