@@ -1,4 +1,3 @@
-// Inside Appbar component
 import React, { useState } from "react";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -14,9 +13,11 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import { Navigate } from 'react-router-dom';
 
 const Appbar = ({ onSelectSection }) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [isLoggedOut, setIsLoggedOut] = useState(false); // Track logout state
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -28,9 +29,17 @@ const Appbar = ({ onSelectSection }) => {
     };
 
     const handleMenuClick = (section) => {
-        onSelectSection(section);  // Update the active section
-        setDrawerOpen(false);      // Close the drawer on mobile after selection
+        if (section === 'Logout') {
+            setIsLoggedOut(true); // Set the logout state to true
+        } else {
+            onSelectSection(section);  // Update the active section
+            setDrawerOpen(false);      // Close the drawer on mobile after selection
+        }
     };
+
+    if (isLoggedOut) {
+        return <Navigate to="/" />; // Redirect to the login page when logged out
+    }
 
     const menuItems = (
         <List>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -9,23 +9,24 @@ import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Skeleton from '@mui/material/Skeleton';
 import { Box } from '@mui/material';
+import axios from 'axios';
 
-function Media({ loading = false }) {
+function Media({ loading = false, newsItem }) {
   return (
-    <Card sx={{ maxWidth: 800, m: 2 }}>
+    <Card sx={{ minWidth: "60%", m: 2 }}>
       <CardHeader
         avatar={
           loading ? (
             <Skeleton animation="wave" variant="circular" width={40} height={40} />
           ) : (
             <Avatar
-              alt="Ted talk"
-              src="https://pbs.twimg.com/profile_images/877631054525472768/Xp5FAPD5_reasonably_small.jpg"
+              alt="News Avatar"
+              src="https://img.icons8.com/color/48/news.png" // Placeholder avatar
             />
           )
         }
         action={
-          loading ? null : ( 
+          loading ? null : (
             <IconButton aria-label="settings">
               <MoreVertIcon />
             </IconButton>
@@ -40,14 +41,14 @@ function Media({ loading = false }) {
               style={{ marginBottom: 6 }}
             />
           ) : (
-            'Ted'
+            newsItem.headline
           )
         }
         subheader={
           loading ? (
             <Skeleton animation="wave" height={10} width="40%" />
           ) : (
-            '5 hours ago'
+            newsItem.date
           )
         }
       />
@@ -57,8 +58,8 @@ function Media({ loading = false }) {
         <CardMedia
           component="img"
           height="390"
-          image="https://pi.tedcdn.com/r/talkstar-photos.s3.amazonaws.com/uploads/72bda89f-9bbf-4685-910a-2f151c4f3a8a/NicolaSturgeon_2019T-embed.jpg?w=512"
-          alt="Nicola Sturgeon on a TED talk stage"
+          image={newsItem.image || 'https://via.placeholder.com/512'} // Fallback for missing images
+          alt={newsItem.headline}
         />
       )}
       <CardContent>
@@ -69,9 +70,7 @@ function Media({ loading = false }) {
           </>
         ) : (
           <Typography variant="body2" component="p" sx={{ color: 'text.secondary' }}>
-            {
-              "Why First Minister of Scotland Nicola Sturgeon thinks GDP is the wrong measure of a country's success:"
-            }
+            {newsItem.news}
           </Typography>
         )}
       </CardContent>
@@ -80,6 +79,25 @@ function Media({ loading = false }) {
 }
 
 export default function Resource() {
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/create-med-news');
+        const newsData = Array.isArray(response.data) ? response.data : [response.data];
+        setNews(newsData);
+      } catch (error) {
+        console.error('Error fetching news:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
   return (
     <Box
       display="flex"
@@ -88,8 +106,11 @@ export default function Resource() {
       justifyContent="center"
       minHeight="100vh"
     >
-      <Media />
-      <Media />
+      {loading
+        ? Array.from({ length: 2 }).map((_, index) => <Media key={index} loading />)
+        : news.map((newsItem) => (
+            <Media key={newsItem.id} newsItem={newsItem} />
+          ))}
     </Box>
   );
 }
