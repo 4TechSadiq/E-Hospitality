@@ -29,13 +29,13 @@ export default function UserDetails({ userId }) {
     <div className="col-12 p-5 shadow rounded d-flex">
       <div>
         <img
-          className="user-avatar rounded-circle"
+          className="user-avatar rounded ms-3"
           style={{ width: "150px", height: "150px" }}
           src={data.profile || "https://via.placeholder.com/150"}
           alt="User Avatar"
         />
       </div>
-      <div className="user-details">
+      <div className="user-details ms-3">
         <Typography variant="h6">{data.first_name || "User Name"}</Typography>
         <Typography variant="h6">{data.last_name || "Last Name"}</Typography>
         <Typography variant="body2">{data.email || "user@example.com"}</Typography>
