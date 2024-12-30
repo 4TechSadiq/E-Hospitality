@@ -6,14 +6,16 @@ import { Button } from '@mui/base/Button';
 import { useSpring, animated } from '@react-spring/web';
 import AppointmentForm from './AppointmentForm';
 
-export default function AppointmentModal({ doc_id,user_id }) { // Accept doctor prop here
+export default function AppointmentModal({ doc_id, user_id }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <div>
-      <TriggerButton sx={{background:"#0276F3FF", color:"#FFF"}} onClick={handleOpen}>Book</TriggerButton>
+      <TriggerButton sx={{background:"#0276F3FF", color:"#FFF"}} onClick={handleOpen}>
+        Book
+      </TriggerButton>
       <Modal
         aria-labelledby="spring-modal-title"
         aria-describedby="spring-modal-description"
@@ -23,8 +25,7 @@ export default function AppointmentModal({ doc_id,user_id }) { // Accept doctor 
         slots={{ backdrop: StyledBackdrop }}
       >
         <Fade in={open}>
-          <ModalContent sx={style}>
-            {/* Pass doctor prop to AppointmentForm */}
+          <ModalContent style={style}>
             <AppointmentForm doc_id={doc_id} user_id={user_id} />
           </ModalContent>
         </Fade>
@@ -33,20 +34,18 @@ export default function AppointmentModal({ doc_id,user_id }) { // Accept doctor 
   );
 }
 
-// Define PropTypes for AppointmentModal
 AppointmentModal.propTypes = {
-  doctor: PropTypes.shape({
-    doc_name: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
-    hospital: PropTypes.string.isRequired,
-    experience: PropTypes.number,
-    image: PropTypes.string,
-  }).isRequired,
+  doc_id: PropTypes.string.isRequired,
+  user_id: PropTypes.string.isRequired,
 };
 
 const Backdrop = React.forwardRef((props, ref) => {
   const { open, ...other } = props;
-  return <Fade ref={ref} in={open} {...other} />;
+  return (
+    <Fade ref={ref} in={open} {...other}>
+      <div style={{ position: 'fixed', inset: 0 }} />
+    </Fade>
+  );
 });
 
 Backdrop.propTypes = {
@@ -193,5 +192,8 @@ const TriggerButton = styled(Button)(
       box-shadow: 0 0 0 4px ${theme.palette.mode === 'dark' ? blue[300] : blue[200]};
       outline: none;
     }
+
+    // Add any custom styles passed through the sx prop
+    ${props => props.sx}
   `,
 );

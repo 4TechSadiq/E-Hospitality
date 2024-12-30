@@ -9,6 +9,11 @@ import AppointmentForm from "./components/userpage/AppointmentForm";
 import Login from "./components/userpage/Login";
 import UserPage from "./components/userpage/UserPage";
 
+import {loadStripe} from '@stripe/stripe-js';
+const stripe = loadStripe("pk_test_51BTUDGJAJfZb9HEBwDg86TN1KNprHjkfipXmEDMb0gSCassK5T3ZfxsAbcgKVmAIXF7oZ6ItlZZbXO6idTHE67IM007EwQ4uN3", {
+  betas: ['custom_checkout_beta_5'],
+});
+
 const NotFound = () => (
   <div style={{ textAlign: "center", marginTop: "50px" }}>
     <h1>404</h1>
