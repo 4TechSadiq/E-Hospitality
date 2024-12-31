@@ -31,7 +31,7 @@ function App() {
         <Route path="/Doc-login" element={<DoctorLogin />} />
         <Route path="/user/:userId" element={<UserPage />} />
         <Route path="/UserDashboard/:userId" element={<Dashboard />} />
-        <Route path="/DoctorDashboard" element={<DoctorDashboard />}>
+        <Route path="/DoctorDashboard/:doc_id" element={<DoctorDashboard />}>
           <Route path="patient/:patientId" element={<PatientModule />} />
         </Route>
         <Route path="*" element={<NotFound />} />

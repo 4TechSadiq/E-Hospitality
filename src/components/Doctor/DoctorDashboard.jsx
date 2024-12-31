@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useParams } from "react-router-dom";
 import { extendTheme } from "@mui/material/styles";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -86,7 +87,7 @@ function CustomAppBar() {
 
 export default function DoctorDashboard(props) {
   const { window } = props;
-
+  const { doc_id } = useParams(); // Extract docId from URL
   const router = useDemoRouter("/dashboard");
   const [selectedPatient, setSelectedPatient] = React.useState(null);
 
@@ -114,7 +115,7 @@ export default function DoctorDashboard(props) {
                 </Box>
 
                 {!selectedPatient ? (
-                  <Appointments onOpenPatient={handleOpenPatient} />
+                  <Appointments docId={doc_id} onOpenPatient={handleOpenPatient} />
                 ) : (
                   <PatientModule patientId={selectedPatient} />
                 )}
@@ -157,7 +158,7 @@ export default function DoctorDashboard(props) {
 
   return (
     <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}>
-      <DashboardLayout appBar={<CustomAppBar />}> {/* Use Custom Toolbar */}
+      <DashboardLayout appBar={<CustomAppBar />}>
         <PageContainer>{renderContent()}</PageContainer>
       </DashboardLayout>
     </AppProvider>

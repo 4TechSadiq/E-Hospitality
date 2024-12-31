@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import axios from 'axios';
 
-function Appointments({ onOpenPatient }) {
-  const appointments = [
-    { id: 1, name: 'John Doe', date: '2024-12-07', time: '10:00 AM' },
-    { id: 2, name: 'Jane Smith', date: '2024-12-08', time: '11:30 AM' },
-  ];
+function Appointments({ docId }) {
+  const [appointments, setAppointments] = useState([]);
+  const [filteredAppointments, setFilteredAppointments] = useState([]);
+
+  useEffect(() => {
+    // Fetch appointments from the API
+    const fetchAppointments = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/list-appointment');
+        const data = response.data;
+        console.log(data);
+        console.log(docId);
+
+        // Set appointments and filter based on docId
+        setAppointments(data);
+        const filtered = data.filter((appointment) => appointment.doc_id === docId);
+        setFilteredAppointments(filtered);
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+      }
+    };
+
+    fetchAppointments();
+  }, [docId]);
 
   return (
     <Box>
@@ -14,18 +34,23 @@ function Appointments({ onOpenPatient }) {
           <TableRow>
             <TableCell>Patient Name</TableCell>
             <TableCell>Date</TableCell>
-            <TableCell>Time</TableCell>
+            <TableCell>Disease</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {appointments.map((appointment) => (
+          {filteredAppointments.map((appointment) => (
             <TableRow key={appointment.id}>
-              <TableCell>{appointment.name}</TableCell>
-              <TableCell>{appointment.date}</TableCell>
-              <TableCell>{appointment.time}</TableCell>
               <TableCell>
-                <Button variant="contained" onClick={() => onOpenPatient(appointment.id)}>
+                {appointment.first_name} {appointment.mid_name} {appointment.last_name}
+              </TableCell>
+              <TableCell>{appointment.date}</TableCell>
+              <TableCell>{appointment.disease}</TableCell>
+              <TableCell>
+                <Button
+                  variant="contained"
+                  onClick={() => alert(`Opening details for Appointment ID: ${appointment.ap_id}`)}
+                >
                   Open
                 </Button>
               </TableCell>

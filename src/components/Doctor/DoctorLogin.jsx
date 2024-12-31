@@ -54,7 +54,7 @@ export default function DoctorLogin() {
         sessionStorage.setItem('doctorName', doctor.doc_name);
         
         // Navigate to doctor dashboard
-        navigate('/DoctorDashboard');
+        navigate(`/DoctorDashboard/${doctor.doc_id}`);
       } else {
         setError('Invalid email or password');
       }
