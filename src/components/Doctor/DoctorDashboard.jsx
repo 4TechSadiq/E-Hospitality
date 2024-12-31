@@ -1,5 +1,5 @@
-import * as React from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { extendTheme } from "@mui/material/styles";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -53,20 +53,6 @@ const demoTheme = extendTheme({
   },
 });
 
-function useDemoRouter(initialPath) {
-  const [pathname, setPathname] = React.useState(initialPath);
-
-  const router = React.useMemo(() => {
-    return {
-      pathname,
-      searchParams: new URLSearchParams(),
-      navigate: (path) => setPathname(String(path)),
-    };
-  }, [pathname]);
-
-  return router;
-}
-
 function CustomAppBar() {
   return (
     <AppBar position="static">
@@ -86,23 +72,24 @@ function CustomAppBar() {
 }
 
 export default function DoctorDashboard(props) {
-  const { window } = props;
   const { doc_id } = useParams(); // Extract docId from URL
-  const router = useDemoRouter("/dashboard");
-  const [selectedPatient, setSelectedPatient] = React.useState(null);
+  const navigate = useNavigate();
+  const [selectedPatient, setSelectedPatient] = useState(null);
 
   const handleOpenPatient = (patientId) => {
     setSelectedPatient(patientId);
-    router.navigate(`/dashboard/patient/${patientId}`);
+    navigate(`/DoctorDashboard/${doc_id}/patient/${patientId}`);
   };
 
   const renderContent = () => {
-    if (router.pathname.startsWith("/dashboard/patient")) {
+    const currentPath = window.location.pathname;
+
+    if (currentPath.includes(`/DoctorDashboard/${doc_id}/patient`)) {
       return <PatientModule patientId={selectedPatient} />;
     }
 
-    switch (router.pathname) {
-      case "/dashboard":
+    switch (currentPath) {
+      case `/DoctorDashboard/${doc_id}`:
         return (
           <>
             <Grid container spacing={1}>
@@ -114,11 +101,7 @@ export default function DoctorDashboard(props) {
                   </Typography>
                 </Box>
 
-                {!selectedPatient ? (
-                  <Appointments docId={doc_id} onOpenPatient={handleOpenPatient} />
-                ) : (
-                  <PatientModule patientId={selectedPatient} />
-                )}
+                <Appointments docId={doc_id} onOpenPatient={handleOpenPatient} />
 
                 <Container>
                   <Grid container spacing={2} justifyContent="center" className="mt-3">
@@ -148,7 +131,7 @@ export default function DoctorDashboard(props) {
           </>
         );
 
-      case "/orders":
+      case `/DoctorDashboard/${doc_id}/orders`:
         return <Histories />;
 
       default:
@@ -157,7 +140,7 @@ export default function DoctorDashboard(props) {
   };
 
   return (
-    <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}>
+    <AppProvider navigation={NAVIGATION} theme={demoTheme}>
       <DashboardLayout appBar={<CustomAppBar />}>
         <PageContainer>{renderContent()}</PageContainer>
       </DashboardLayout>
