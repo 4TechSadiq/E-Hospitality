@@ -91,10 +91,10 @@ export default function PatientHistory() {
         const conditions = conditionResponse.data;
         const histories = historyResponse.data;
 
-        // Map histories to their corresponding medical conditions
+        // Merge histories with the corresponding medical condition
         const mergedData = conditions.map((condition) => ({
           ...condition,
-          history: histories.filter((history) => history.medical_condition === condition.id),
+          history: histories.filter((history) => history.medical_condition === condition.condition),
         }));
 
         setRows(mergedData);

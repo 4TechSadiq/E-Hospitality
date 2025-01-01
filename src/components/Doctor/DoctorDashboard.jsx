@@ -10,6 +10,10 @@ import Grid from "@mui/material/Grid";
 import Appointments from "./Appointments";
 import PatientModule from "./PatientModule";
 import Histories from "./Histories";
+import HistoryIcon from '@mui/icons-material/History';
+import FeedIcon from '@mui/icons-material/Feed';
+import MedicationIcon from '@mui/icons-material/Medication';
+
 import {
   AppBar,
   Toolbar,
@@ -21,23 +25,6 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SettingsIcon from "@mui/icons-material/Settings";
-
-const NAVIGATION = [
-  {
-    kind: "header",
-    title: "Main items",
-  },
-  {
-    segment: "dashboard",
-    title: "Dashboard",
-    icon: <DashboardIcon />,
-  },
-  {
-    segment: "orders",
-    title: "Histories",
-    icon: <ShoppingCartIcon />,
-  },
-];
 
 const demoTheme = extendTheme({
   colorSchemes: { light: true, dark: true },
@@ -75,6 +62,34 @@ export default function DoctorDashboard(props) {
   const { doc_id } = useParams(); // Extract docId from URL
   const navigate = useNavigate();
   const [selectedPatient, setSelectedPatient] = useState(null);
+
+  // Dynamic navigation array using doc_id
+  const NAVIGATION = useMemo(() => [
+    {
+      kind: "header",
+      title: "Main items",
+    },
+    {
+      segment: `DoctorDashboard/${doc_id}`,
+      title: "Dashboard",
+      icon: <DashboardIcon />,
+    },
+    {
+      segment: "orders",
+      title: "Histories",
+      icon: <HistoryIcon />,
+    },
+    {
+      segment: "orders",
+      title: "Add Feed",
+      icon: <FeedIcon />,
+    },
+    {
+      segment: "orders",
+      title: "New Medicines",
+      icon: <MedicationIcon />,
+    },
+  ], [doc_id]); // Recalculate NAVIGATION whenever doc_id changes
 
   const handleOpenPatient = (patientId) => {
     setSelectedPatient(patientId);

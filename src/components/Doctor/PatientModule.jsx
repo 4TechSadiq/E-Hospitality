@@ -147,7 +147,7 @@ export default function PatientModule() {
       </Container>
 
       {/* Health Index Section */}
-      <Container>
+      {/* <Container>
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <Typography className="mt-3" variant="h5">
@@ -162,7 +162,7 @@ export default function PatientModule() {
             <Barchart />
           </Grid>
         </Grid>
-      </Container>
+      </Container> */}
 
       {/* Medical History Section */}
       <Container className="mt-4">

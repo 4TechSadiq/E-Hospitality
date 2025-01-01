@@ -1,18 +1,28 @@
+// PrescriptionTable.jsx
+
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Autocomplete from '@mui/material/Autocomplete';
-import { Button, Typography, Box, Container } from '@mui/material';
-import axios from 'axios';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TextField,
+  MenuItem,
+  Select,
+  Button,
+  Typography,
+  Box,
+  Container,
+  FormControl,
+  CircularProgress,
+  InputLabel,
+} from '@mui/material';
+import { useParams } from 'react-router-dom';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -33,7 +43,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function PrescriptionTable(patientId, doc_id) {
+export default function PrescriptionTable() {
   const [rows, setRows] = React.useState([
     { id: 1, medicine: '', dosage: '', timesPerDay: '', routine: '' },
     { id: 2, medicine: '', dosage: '', timesPerDay: '', routine: '' },
@@ -43,17 +53,26 @@ export default function PrescriptionTable(patientId, doc_id) {
   const [remarks, setRemarks] = React.useState('');
   const [outcome, setOutcome] = React.useState('');
   const [medicines, setMedicines] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const { patientId, doc_id } = useParams();
 
   React.useEffect(() => {
-    // Fetch medicine data from API
-    axios.get('http://127.0.0.1:8000/list-medicine')
-      .then(response => {
-        setMedicines(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching medicine data:', error);
-      });
+    fetchMedicines();
   }, []);
+
+  const fetchMedicines = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/list-medicine');
+      if (!response.ok) {
+        throw new Error('Failed to fetch medicines');
+      }
+      const data = await response.json();
+      setMedicines(data);
+    } catch (error) {
+      console.error('Error fetching medicines:', error);
+      alert('Failed to load medicines. Please refresh the page.');
+    }
+  };
 
   const handleInputChange = (index, field, value) => {
     const updatedRows = [...rows];
@@ -63,36 +82,103 @@ export default function PrescriptionTable(patientId, doc_id) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const medicalConditionData = {
-      user: patientId,
-      condition: disease,
-      severity: 'Moderate',
-      medication: rows.map((row) => `${row.medicine} (${row.dosage} mg, ${row.routine})`).join(', '),
-      doctor: doc_id,
-      status: 'Under Treatment',
-    };
-
-    const treatmentHistoryData = {
-      user: patientId,
-      medical_condition: disease,
-      remarks,
-      outcome,
-    };
+    setLoading(true);
 
     try {
-      await axios.post('http://127.0.0.1:8000/create-med-condition', medicalConditionData);
-      await axios.post('http://127.0.0.1:8000/create-treatment-history', treatmentHistoryData);
-      alert('Data submitted successfully!');
+      // Filter out empty rows
+      const validRows = rows.filter(row => 
+        row.medicine && row.dosage && row.timesPerDay && row.routine
+      );
+      
+      if (validRows.length === 0) {
+        alert('Please fill in at least one complete prescription row');
+        setLoading(false);
+        return;
+      }
+
+      // Prepare prescription data
+      const prescriptionData = {
+        patient: patientId,
+        medicines: validRows.map(row => {
+          const medicine = medicines.find(m => m.name === row.medicine);
+          return medicine ? medicine.id : null;
+        }).filter(id => id !== null),
+        dosage: validRows.map(row => `${row.dosage}`).join(', '),
+        times_per_day: parseInt(validRows[0].timesPerDay),
+        routine: validRows.map(row => row.routine).join(', ')
+      };
+
+      // Create medical condition data
+      const medicalConditionData = {
+        user: patientId,
+        condition: disease,
+        severity: 'Moderate',
+        medication: validRows
+          .map(row => `${row.medicine} (${row.dosage} mg, ${row.routine})`)
+          .join(', '),
+        doctor: doc_id,
+        status: 'Under Treatment',
+      };
+
+      // Create treatment history data
+      const treatmentHistoryData = {
+        user: patientId,
+        medical_condition: disease,
+        remarks,
+        outcome,
+      };
+
+      // Send all requests
+      const responses = await Promise.all([
+        // fetch('http://127.0.0.1:8000/create-prescription', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify(prescriptionData)
+        // }),
+        fetch('http://127.0.0.1:8000/create-med-condition', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(medicalConditionData)
+        }),
+        fetch('http://127.0.0.1:8000/create-treatment-history', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(treatmentHistoryData)
+        })
+      ]);
+
+      // Check if all requests were successful
+      const hasError = responses.some(response => !response.ok);
+      if (hasError) {
+        throw new Error('One or more requests failed');
+      }
+
+      alert('Prescription created successfully!');
+      handleReset();
     } catch (error) {
       console.error('Error submitting data:', error);
-      alert('Failed to submit data.');
+      alert('Failed to create prescription. Please try again.');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleReset = () => {
+    setRows(rows.map(row => ({
+      ...row,
+      medicine: '',
+      dosage: '',
+      timesPerDay: '',
+      routine: ''
+    })));
+    setDisease('');
+    setRemarks('');
+    setOutcome('');
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Container className="mt-3 mb-3 p-0">
+      <Container className="mt-3 mb-3">
         <Typography variant="h6" gutterBottom>
           Enter Disease
         </Typography>
@@ -102,76 +188,85 @@ export default function PrescriptionTable(patientId, doc_id) {
           fullWidth
           value={disease}
           onChange={(e) => setDisease(e.target.value)}
+          required
         />
       </Container>
+      
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="prescription table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>SINo</StyledTableCell>
-              <StyledTableCell align="right">Medicine Name</StyledTableCell>
-              <StyledTableCell align="right">Dosage (mg)</StyledTableCell>
-              <StyledTableCell align="right">Times per Day</StyledTableCell>
-              <StyledTableCell align="right">Routine (Before/After)</StyledTableCell>
+              <StyledTableCell>No.</StyledTableCell>
+              <StyledTableCell>Medicine Name</StyledTableCell>
+              <StyledTableCell>Dosage (mg)</StyledTableCell>
+              <StyledTableCell>Times per Day</StyledTableCell>
+              <StyledTableCell>Routine</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row, index) => (
               <StyledTableRow key={row.id}>
-                <StyledTableCell component="th" scope="row">
-                  {row.id}
+                <StyledTableCell>{row.id}</StyledTableCell>
+                <StyledTableCell>
+                  <FormControl fullWidth size="small">
+                    <Select
+                      value={row.medicine}
+                      onChange={(e) => handleInputChange(index, 'medicine', e.target.value)}
+                      displayEmpty
+                    >
+                      <MenuItem value="">Select Medicine</MenuItem>
+                      {medicines.map((medicine) => (
+                        <MenuItem key={medicine.id} value={medicine.name}>
+                          {medicine.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </StyledTableCell>
-                <StyledTableCell align="right">
-                  <Autocomplete
-                    options={medicines.map((med) => med.name)}
-                    value={row.medicine}
-                    onChange={(e, value) => handleInputChange(index, 'medicine', value)}
-                    renderInput={(params) => <TextField {...params} variant="filled" size="small" />}
-                  />
-                </StyledTableCell>
-                <StyledTableCell align="right">
+                <StyledTableCell>
                   <TextField
-                    variant="filled"
+                    type="number"
                     size="small"
+                    fullWidth
                     value={row.dosage}
                     onChange={(e) => handleInputChange(index, 'dosage', e.target.value)}
+                    InputProps={{ inputProps: { min: 0 } }}
                   />
                 </StyledTableCell>
-                <StyledTableCell align="right">
-                  <Select
-                    value={row.timesPerDay || ''}
-                    onChange={(e) => handleInputChange(index, 'timesPerDay', e.target.value)}
-                    size="small"
-                    fullWidth
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value="1">1</MenuItem>
-                    <MenuItem value="2">2</MenuItem>
-                    <MenuItem value="3">3</MenuItem>
-                  </Select>
+                <StyledTableCell>
+                  <FormControl fullWidth size="small">
+                    <Select
+                      value={row.timesPerDay}
+                      onChange={(e) => handleInputChange(index, 'timesPerDay', e.target.value)}
+                      displayEmpty
+                    >
+                      <MenuItem value="">Select Frequency</MenuItem>
+                      <MenuItem value="1">1</MenuItem>
+                      <MenuItem value="2">2</MenuItem>
+                      <MenuItem value="3">3</MenuItem>
+                    </Select>
+                  </FormControl>
                 </StyledTableCell>
-                <StyledTableCell align="right">
-                  <Select
-                    value={row.routine || ''}
-                    onChange={(e) => handleInputChange(index, 'routine', e.target.value)}
-                    size="small"
-                    fullWidth
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value="Before">Before</MenuItem>
-                    <MenuItem value="After">After</MenuItem>
-                  </Select>
+                <StyledTableCell>
+                  <FormControl fullWidth size="small">
+                    <Select
+                      value={row.routine}
+                      onChange={(e) => handleInputChange(index, 'routine', e.target.value)}
+                      displayEmpty
+                    >
+                      <MenuItem value="">Select Timing</MenuItem>
+                      <MenuItem value="Before">Before</MenuItem>
+                      <MenuItem value="After">After</MenuItem>
+                    </Select>
+                  </FormControl>
                 </StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <Container>
+
+      <Container sx={{ mt: 3 }}>
         <Typography variant="h6" gutterBottom>
           Remarks
         </Typography>
@@ -179,26 +274,49 @@ export default function PrescriptionTable(patientId, doc_id) {
           variant="filled"
           size="small"
           fullWidth
+          multiline
+          rows={2}
           value={remarks}
           onChange={(e) => setRemarks(e.target.value)}
         />
-        <Typography variant="h6" gutterBottom>
+        
+        <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
           Outcome
         </Typography>
         <TextField
           variant="filled"
           size="small"
           fullWidth
+          multiline
+          rows={2}
           value={outcome}
           onChange={(e) => setOutcome(e.target.value)}
         />
       </Container>
+
       <Box display="flex" justifyContent="flex-end" alignItems="center" mt={3} gap={2}>
-        <Button variant="contained" color="secondary" type="reset">
+        <Button 
+          variant="contained" 
+          color="secondary" 
+          onClick={handleReset}
+          disabled={loading}
+        >
           Clear
         </Button>
-        <Button variant="contained" color="primary" type="submit">
-          Submit
+        <Button 
+          variant="contained" 
+          color="primary" 
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <CircularProgress size={20} color="inherit" />
+              Submitting...
+            </Box>
+          ) : (
+            'Submit'
+          )}
         </Button>
       </Box>
     </form>
