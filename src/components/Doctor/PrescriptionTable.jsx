@@ -10,7 +10,9 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import Autocomplete from '@mui/material/Autocomplete';
 import { Button, Typography, Box, Container } from '@mui/material';
+import axios from 'axios';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -31,14 +33,27 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function PrescriptionTable() {
+export default function PrescriptionTable(patientId, doc_id) {
   const [rows, setRows] = React.useState([
     { id: 1, medicine: '', dosage: '', timesPerDay: '', routine: '' },
     { id: 2, medicine: '', dosage: '', timesPerDay: '', routine: '' },
     { id: 3, medicine: '', dosage: '', timesPerDay: '', routine: '' },
-    { id: 4, medicine: '', dosage: '', timesPerDay: '', routine: '' },
-    { id: 5, medicine: '', dosage: '', timesPerDay: '', routine: '' },
   ]);
+  const [disease, setDisease] = React.useState('');
+  const [remarks, setRemarks] = React.useState('');
+  const [outcome, setOutcome] = React.useState('');
+  const [medicines, setMedicines] = React.useState([]);
+
+  React.useEffect(() => {
+    // Fetch medicine data from API
+    axios.get('http://127.0.0.1:8000/list-medicine')
+      .then(response => {
+        setMedicines(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching medicine data:', error);
+      });
+  }, []);
 
   const handleInputChange = (index, field, value) => {
     const updatedRows = [...rows];
@@ -46,13 +61,48 @@ export default function PrescriptionTable() {
     setRows(updatedRows);
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const medicalConditionData = {
+      user: patientId,
+      condition: disease,
+      severity: 'Moderate',
+      medication: rows.map((row) => `${row.medicine} (${row.dosage} mg, ${row.routine})`).join(', '),
+      doctor: doc_id,
+      status: 'Under Treatment',
+    };
+
+    const treatmentHistoryData = {
+      user: patientId,
+      medical_condition: disease,
+      remarks,
+      outcome,
+    };
+
+    try {
+      await axios.post('http://127.0.0.1:8000/create-med-condition', medicalConditionData);
+      await axios.post('http://127.0.0.1:8000/create-treatment-history', treatmentHistoryData);
+      alert('Data submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting data:', error);
+      alert('Failed to submit data.');
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <Container className="mt-3 mb-3 p-0">
         <Typography variant="h6" gutterBottom>
           Enter Disease
         </Typography>
-        <TextField variant="filled" size="small" fullWidth />
+        <TextField
+          variant="filled"
+          size="small"
+          fullWidth
+          value={disease}
+          onChange={(e) => setDisease(e.target.value)}
+        />
       </Container>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="prescription table">
@@ -72,11 +122,11 @@ export default function PrescriptionTable() {
                   {row.id}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  <TextField
-                    variant="filled"
-                    size="small"
+                  <Autocomplete
+                    options={medicines.map((med) => med.name)}
                     value={row.medicine}
-                    onChange={(e) => handleInputChange(index, 'medicine', e.target.value)}
+                    onChange={(e, value) => handleInputChange(index, 'medicine', value)}
+                    renderInput={(params) => <TextField {...params} variant="filled" size="small" />}
                   />
                 </StyledTableCell>
                 <StyledTableCell align="right">
@@ -121,14 +171,29 @@ export default function PrescriptionTable() {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* Buttons */}
-      <Box
-        display="flex"
-        justifyContent="flex-end"
-        alignItems="center"
-        mt={3}
-        gap={2}
-      >
+      <Container>
+        <Typography variant="h6" gutterBottom>
+          Remarks
+        </Typography>
+        <TextField
+          variant="filled"
+          size="small"
+          fullWidth
+          value={remarks}
+          onChange={(e) => setRemarks(e.target.value)}
+        />
+        <Typography variant="h6" gutterBottom>
+          Outcome
+        </Typography>
+        <TextField
+          variant="filled"
+          size="small"
+          fullWidth
+          value={outcome}
+          onChange={(e) => setOutcome(e.target.value)}
+        />
+      </Container>
+      <Box display="flex" justifyContent="flex-end" alignItems="center" mt={3} gap={2}>
         <Button variant="contained" color="secondary" type="reset">
           Clear
         </Button>

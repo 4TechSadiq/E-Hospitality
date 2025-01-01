@@ -6,7 +6,7 @@ import Fade from '@mui/material/Fade';
 import { Button } from '@mui/base/Button';
 import PrescriptionTable from './PrescriptionTable';
 
-export default function PrescriptionModal() {
+export default function PrescriptionModal( patientId, doc_id) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -24,7 +24,7 @@ export default function PrescriptionModal() {
       >
         <Fade in={open}>
           <ModalContent sx={style}>
-            <PrescriptionTable/>
+            <PrescriptionTable patientId={patientId} doc_id={doc_id} />
           </ModalContent>
         </Fade>
       </Modal>

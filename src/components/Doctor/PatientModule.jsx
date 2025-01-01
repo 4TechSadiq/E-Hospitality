@@ -5,19 +5,21 @@ import axios from "axios";
 import Barchart from "./Barchart"; // Assuming you have this component
 import History from "./History"; // Assuming you have this component
 import PrescriptionModal from "./PrescriptionModal"; // Assuming you have this component
+import PatientHistory from "./PatientHistory";
+
 
 export default function PatientModule() {
+  const { doc_id } = useParams();
   const { patientId } = useParams(); // Get patientId from the URL
   const [patientDetails, setPatientDetails] = useState(null); // State to store patient details
+  const [appointments, setAppointments] = useState([]); // State to store appointments
   const [loading, setLoading] = useState(true); // State to handle loading
+  const [selectedAppointment, setSelectedAppointment] = useState(null); // State for filtered appointment
 
-  // Function to fetch patient details from API
+  // Fetch patient details
   const fetchPatientDetails = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/list-user");
-      console.log("API Response:", response.data);
-
-      // Find the user with the matching `id` and `patientId`
       const user = response.data.find((u) => u.id === parseInt(patientId));
 
       if (user) {
@@ -28,13 +30,32 @@ export default function PatientModule() {
     } catch (error) {
       console.error("Error fetching patient details:", error);
     } finally {
-      setLoading(false); // Stop loading after fetching
+      setLoading(false);
+    }
+  };
+
+  // Fetch appointments
+  const fetchAppointments = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/list-appointment");
+      const filteredAppointments = response.data.filter(
+        (appointment) => appointment.user_id === patientId
+      );
+
+      setAppointments(filteredAppointments);
+
+      if (filteredAppointments.length > 0) {
+        setSelectedAppointment(filteredAppointments[0]); // Select the first appointment
+      }
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
     }
   };
 
   useEffect(() => {
-    fetchPatientDetails(); // Fetch patient details when the component mounts
-  }, [patientId]); // Re-run when patientId changes
+    fetchPatientDetails();
+    fetchAppointments();
+  }, [patientId]);
 
   return (
     <Container>
@@ -93,24 +114,36 @@ export default function PatientModule() {
       {/* Disease Section */}
       <Container className="mt-4">
         <Typography variant="h5">Disease</Typography>
-        <Box
-          sx={{
-            width: "40%",
-            height: "50px",
-            borderRadius: "10px",
-            boxShadow: "0 1px 1px #ccc",
-            border: "1px solid #ccc",
-            padding: "10px",
-            marginTop: "10px",
-            ":hover": {
-              backgroundColor: "#ccc",
-              width: "42%",
-              transition: "0.5s",
-            },
-          }}
-        >
-          <Typography variant="subtitle1">Disease Name: Example Disease</Typography>
-        </Box>
+        {selectedAppointment ? (
+          <Box
+            sx={{
+              width: "40%",
+              minHeight: "50px",
+              maxHeight: "fit-content",
+              borderRadius: "10px",
+              boxShadow: "0 1px 1px #ccc",
+              border: "1px solid #ccc",
+              padding: "10px",
+              marginTop: "10px",
+              ":hover": {
+                backgroundColor: "#ccc",
+                width: "42%",
+                transition: "0.5s",
+              },
+            }}
+          >
+            <Typography variant="subtitle1">
+              Disease Name: {selectedAppointment.disease}
+            </Typography>
+            <Typography variant="subtitle1">
+              Description: {selectedAppointment.description}
+            </Typography>
+            
+          </Box>
+          
+        ) : (
+          <Typography variant="subtitle1">No appointment found</Typography>
+        )}
       </Container>
 
       {/* Health Index Section */}
@@ -133,8 +166,7 @@ export default function PatientModule() {
 
       {/* Medical History Section */}
       <Container className="mt-4">
-        <Typography variant="h5">Medical History</Typography>
-        <History />
+        <PatientHistory />
       </Container>
 
       {/* Prescription Table Section */}
@@ -142,7 +174,7 @@ export default function PatientModule() {
         <Typography variant="h5" className="mb-3">
           Prescription Table
         </Typography>
-        <PrescriptionModal />
+        <PrescriptionModal patientId={patientId} doc_id={doc_id}/>
       </Container>
     </Container>
   );
