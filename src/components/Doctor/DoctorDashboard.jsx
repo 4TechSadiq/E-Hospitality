@@ -75,17 +75,17 @@ export default function DoctorDashboard(props) {
       icon: <DashboardIcon />,
     },
     {
-      segment: "orders",
+      segment: `DoctorDashboard/${doc_id}/History`,
       title: "Histories",
       icon: <HistoryIcon />,
     },
     {
-      segment: "orders",
+      segment: `DoctorDashboard/${doc_id}/Newfeed`,
       title: "Add Feed",
       icon: <FeedIcon />,
     },
     {
-      segment: "orders",
+      segment: `DoctorDashboard/${doc_id}/AddMedication`,
       title: "New Medicines",
       icon: <MedicationIcon />,
     },

@@ -32,6 +32,9 @@ function App() {
         <Route path="/user/:userId" element={<UserPage />} />
         <Route path="/UserDashboard/:userId" element={<Dashboard />} />
         <Route path="/DoctorDashboard/:doc_id" element={<DoctorDashboard />}>
+          <Route path="History" element={<DoctorDashboard />} />
+          <Route path="Newfeed" element={<DoctorDashboard />} />
+          <Route path="AddMedication" element={<DoctorDashboard />} />
           <Route path="patient/:patientId" element={<PatientModule />} />
         </Route>
         <Route path="*" element={<NotFound />} />
