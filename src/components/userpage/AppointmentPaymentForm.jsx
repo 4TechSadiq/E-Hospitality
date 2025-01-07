@@ -59,7 +59,7 @@ const CheckoutForm = ({ appointmentData, onSuccess }) => {
           body: JSON.stringify({
             ...appointmentData,
             payment_intent_id: result.paymentIntent.id,
-            payment_status: 'completed',
+            payment_status: 'pending',
           }),
         });
 

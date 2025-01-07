@@ -13,6 +13,8 @@ import Histories from "./Histories";
 import HistoryIcon from '@mui/icons-material/History';
 import FeedIcon from '@mui/icons-material/Feed';
 import MedicationIcon from '@mui/icons-material/Medication';
+import History from "./History";
+
 
 import {
   AppBar,
@@ -25,6 +27,8 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SettingsIcon from "@mui/icons-material/Settings";
+import AddFeed from "./AddFeed";
+import AddMedicines from "./AddMedicines";
 
 const demoTheme = extendTheme({
   colorSchemes: { light: true, dark: true },
@@ -109,16 +113,16 @@ export default function DoctorDashboard(props) {
           <>
             <Grid container spacing={1}>
               <Grid item xs={12}>
-                <Box display="flex" gap={2}>
+                {/* <Box display="flex" gap={2}>
                   <Typography variant="h5">Status:</Typography>
                   <Typography variant="h5" color="error">
                     Offline
                   </Typography>
-                </Box>
+                </Box> */}
 
                 <Appointments docId={doc_id} onOpenPatient={handleOpenPatient} />
 
-                <Container>
+                {/* <Container>
                   <Grid container spacing={2} justifyContent="center" className="mt-3">
                     <Grid item xs={3}>
                       <Typography textAlign="center" variant="h6">
@@ -140,14 +144,20 @@ export default function DoctorDashboard(props) {
                       </Box>
                     </Grid>
                   </Grid>
-                </Container>
+                </Container> */}
               </Grid>
             </Grid>
           </>
         );
 
-      case `/DoctorDashboard/${doc_id}/orders`:
-        return <Histories />;
+      case `/DoctorDashboard/${doc_id}/History`:
+        return <History />;
+
+      case `/DoctorDashboard/${doc_id}/Newfeed`:
+          return <AddFeed />;
+
+      case `/DoctorDashboard/${doc_id}/AddMedication`:
+        return <AddMedicines />;
 
       default:
         return <div>Page not found</div>;

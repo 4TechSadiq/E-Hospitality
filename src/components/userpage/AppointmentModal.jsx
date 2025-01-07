@@ -13,7 +13,7 @@ export default function AppointmentModal({ doc_id, user_id }) {
 
   return (
     <div>
-      <TriggerButton sx={{background:"#0276F3FF", color:"#FFF"}} onClick={handleOpen}>
+      <TriggerButton sx={{ background: '#0276F3FF', color: '#FFF' }} onClick={handleOpen}>
         Book
       </TriggerButton>
       <Modal
@@ -26,6 +26,22 @@ export default function AppointmentModal({ doc_id, user_id }) {
       >
         <Fade in={open}>
           <ModalContent style={style}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Button
+                onClick={handleClose}
+                style={{
+                  background: '#F8867EFF',
+                  color: '#fff',
+                  padding: '4px 12px',
+                  borderRadius: '5px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  border: '1px'
+                }}
+              >
+                Close
+              </Button>
+            </div>
             <AppointmentForm doc_id={doc_id} user_id={user_id} />
           </ModalContent>
         </Fade>
