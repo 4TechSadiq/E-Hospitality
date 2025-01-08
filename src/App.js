@@ -10,6 +10,11 @@ import Login from "./components/userpage/Login";
 import UserPage from "./components/userpage/UserPage";
 
 import {loadStripe} from '@stripe/stripe-js';
+import AdminDashboard from "./components/Admin/AdminDashboard";
+import FacilityManagement from "./components/Admin/FacilityManagement";
+import DoctorList from "./components/Admin/DoctorList";
+import UserList from "./components/Admin/UserList";
+import AppointmentManagement from "./components/Admin/AppointmentManagement";
 const stripe = loadStripe("pk_test_51BTUDGJAJfZb9HEBwDg86TN1KNprHjkfipXmEDMb0gSCassK5T3ZfxsAbcgKVmAIXF7oZ6ItlZZbXO6idTHE67IM007EwQ4uN3", {
   betas: ['custom_checkout_beta_5'],
 });
@@ -26,6 +31,13 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="Admin" element={<AdminDashboard />}>
+          <Route path="doctors" element={<DoctorList />} />
+          <Route path="users" element={<UserList />} />
+          <Route path="facilities" element={<FacilityManagement />} />
+          <Route path="appointments" element={<AppointmentManagement />} />
+
+        </Route>
         <Route path="/signup" element={<SignUp />} />
         <Route path="/AppointmentForm" element={<AppointmentForm />} />
         <Route path="/Doc-login" element={<DoctorLogin />} />

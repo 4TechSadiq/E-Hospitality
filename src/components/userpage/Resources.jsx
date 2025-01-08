@@ -21,7 +21,7 @@ function Media({ loading = false, newsItem }) {
           ) : (
             <Avatar
               alt="News Avatar"
-              src="https://img.icons8.com/color/48/news.png" // Placeholder avatar
+              src="https://img.icons8.com/color/48/news.png"
             />
           )
         }
@@ -58,7 +58,7 @@ function Media({ loading = false, newsItem }) {
         <CardMedia
           component="img"
           height="390"
-          image={newsItem.image || 'https://via.placeholder.com/512'} // Fallback for missing images
+          image={newsItem.image || 'https://via.placeholder.com/512'}
           alt={newsItem.headline}
         />
       )}
@@ -87,7 +87,9 @@ export default function Resource() {
       try {
         const response = await axios.get('http://127.0.0.1:8000/create-med-news');
         const newsData = Array.isArray(response.data) ? response.data : [response.data];
-        setNews(newsData);
+        // Sort news by ID in descending order
+        const sortedNews = newsData.sort((a, b) => b.id - a.id);
+        setNews(sortedNews);
       } catch (error) {
         console.error('Error fetching news:', error);
       } finally {

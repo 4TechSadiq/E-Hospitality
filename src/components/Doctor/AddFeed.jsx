@@ -17,7 +17,7 @@ export default function AddFeed() {
     headline: '',
     news: '',
     image: null,
-    doctor: doc_id || '', // Initialize with full doc_id from URL params
+    doctor: doc_id || '',
   });
 
   const [error, setError] = useState('');
@@ -42,7 +42,7 @@ export default function AddFeed() {
       };
       reader.readAsDataURL(file);
       
-      setFormData(prev => ({ ...prev, image: file }));
+      setFormData(prev => ({ ...prev, [name]: file }));
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
     }
@@ -58,13 +58,12 @@ export default function AddFeed() {
       return;
     }
 
-    if (!doc_id) {  // Check the URL param directly
+    if (!doc_id) {
       setError('Doctor ID is missing');
       return;
     }
 
     const data = new FormData();
-    // Use doc_id from URL params directly instead of from formData
     data.append('doctor', doc_id);
     data.append('headline', formData.headline);
     data.append('news', formData.news);
@@ -86,12 +85,11 @@ export default function AddFeed() {
       const result = await response.json();
       console.log('News added successfully:', result);
       
-      // Reset form while maintaining the doctor ID
       setFormData({
         headline: '',
         news: '',
         image: null,
-        doctor: doc_id,  // Keep the full doc_id
+        doctor: doc_id,
       });
       setImagePreview('');
       
@@ -126,6 +124,7 @@ export default function AddFeed() {
                 onChange={handleChange}
                 fullWidth
                 required
+                multiline
               />
 
               <TextField

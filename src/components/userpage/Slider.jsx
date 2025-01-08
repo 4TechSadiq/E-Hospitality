@@ -21,7 +21,7 @@ export default function Slider({ doctor, user_id }) {
         <CardMedia
           component="img"
           height="140"
-          image={doctor.image || 'https://cdn.pixabay.com/photo/2017/01/31/03/23/pointer-2022862_1280.png'}
+          image={doctor.image || 'https://cdn.vectorstock.com/i/500p/95/88/sign-symbol-health-logo-hospital-red-cross-vector-35679588.jpg'}
           alt={doctor.doc_name}
         />
         <CardContent>

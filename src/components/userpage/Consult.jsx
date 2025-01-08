@@ -11,34 +11,46 @@ export default function Consult() {
   const [doctors, setDoctors] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [searchValue, setSearchValue] = useState('');
-  const [searchOptions, setSearchOptions] = useState([]); // New state for search options
+  const [searchOptions, setSearchOptions] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
+        setLoading(true);
         const response = await axios.get('http://127.0.0.1:8000/create-doctor');
         const doctorsData = Array.isArray(response.data) ? response.data : [response.data];
         
-        // Remove any potential duplicates using doc_id
-        const uniqueDoctors = Array.from(new Map(doctorsData.map(doc => [doc.doc_id, doc])).values());
+        // Log the initial data count
+        console.log('Total doctors received:', doctorsData.length);
+        
+        // Instead of deduplicating by doc_id, use id which is unique
+        const uniqueDoctors = doctorsData;
+        
+        console.log('Doctors after processing:', uniqueDoctors.length);
         
         setDoctors(uniqueDoctors);
         setFilteredDoctors(uniqueDoctors);
 
-        // Create search options
+        // Create search options from unique values
         const categories = [...new Set(uniqueDoctors.map(doc => doc.category))];
-        const doctorNames = uniqueDoctors.map(doc => doc.doc_name);
+        const doctorNames = [...new Set(uniqueDoctors.map(doc => doc.doc_name))];
+        
         const options = [
           ...categories.map(cat => ({ type: 'category', label: cat })),
           ...doctorNames.map(name => ({ type: 'doctor', label: name }))
         ];
+        
         setSearchOptions(options);
+        setLoading(false);
       } catch (err) {
         console.error('Error fetching doctor data:', err);
-        setError('Failed to load doctor data.');
+        setError('Failed to load doctor data. Please try again later.');
+        setLoading(false);
       }
     };
+    
     fetchDoctors();
   }, []);
 
@@ -59,17 +71,30 @@ export default function Consult() {
       doc.category.toLowerCase().includes(lowercasedValue)
     );
 
+    console.log('Filtered doctors count:', filtered.length);
     setFilteredDoctors(filtered);
   };
 
+  if (loading) {
+    return (
+      <Container>
+        <Typography>Loading doctors...</Typography>
+      </Container>
+    );
+  }
+
   if (error) {
-    return <Typography color="error">{error}</Typography>;
+    return (
+      <Container>
+        <Typography color="error">{error}</Typography>
+      </Container>
+    );
   }
 
   return (
     <Container>
       <Container className="mt-4">
-        <Typography variant="h3">Consult Doctor</Typography>
+        <Typography variant="h3" className="mb-4">Consult Doctor</Typography>
         <Container className="d-flex mt-4 justify-content-start">
           <Autocomplete
             disablePortal
@@ -89,29 +114,37 @@ export default function Consult() {
               </li>
             )}
             renderInput={(params) => (
-              <TextField {...params} label="Search Category or Doctor" />
+              <TextField 
+                {...params} 
+                label="Search Category or Doctor" 
+                variant="outlined"
+              />
             )}
           />
         </Container>
       </Container>
+      
       <Container className="d-flex justify-content-evenly mt-4 mb-5 flex-wrap">
         {filteredDoctors.length > 0 ? (
           filteredDoctors.map((doctor) => (
             <Slider
-              key={doctor.doc_id}
+              key={`${doctor.id}-${doctor.doc_id}`} // Using composite key for better uniqueness
               doctor={{
                 doc_id: doctor.doc_id,
                 doc_name: doctor.doc_name,
                 category: doctor.category,
                 hospital: doctor.hospital,
                 experience: doctor.experiance,
-                image: doctor.image || null,
+                image: doctor.profile || null, // Changed from image to profile based on your data
+                price: doctor.price, // Added price from your data
               }}
               user_id={userId}
             />
           ))
         ) : (
-          <Typography>No doctors found.</Typography>
+          <Typography variant="h6" className="mt-4">
+            No doctors found matching your search criteria.
+          </Typography>
         )}
       </Container>
     </Container>
