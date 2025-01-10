@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar as MuiAppBar, Toolbar, Typography, IconButton } from '@mui/material';
+import { AppBar as MuiAppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 function AppBar() {
@@ -14,9 +14,10 @@ function AppBar() {
         >
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" noWrap component="div">
+        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
           Admin Dashboard
         </Typography>
+        <Button color="inherit">Logout</Button>
       </Toolbar>
     </MuiAppBar>
   );

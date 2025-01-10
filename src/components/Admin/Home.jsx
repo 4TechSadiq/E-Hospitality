@@ -1,12 +1,8 @@
 import React from 'react';
-import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Avatar } from '@mui/material';
+import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import DoctorList from './DoctorList'; // Import DoctorList component
 
-// Sample data for doctors, users, and appointments
-const doctors = [
-  { id: 1, name: 'Dr. John Doe', hospital: 'City Hospital', category: 'Cardiologist', fees: 100, phone: '123-456-7890', image: 'https://example.com/doctor1.jpg' },
-  { id: 2, name: 'Dr. Jane Smith', hospital: 'Central Clinic', category: 'Pediatrician', fees: 80, phone: '098-765-4321', image: 'https://example.com/doctor2.jpg' },
-];
-
+// Sample data for users and appointments
 const users = [
   { id: 1, name: 'Alice Johnson', email: 'alice@example.com', role: 'Patient' },
   { id: 2, name: 'Bob Williams', email: 'bob@example.com', role: 'Admin' },
@@ -19,49 +15,17 @@ const appointments = [
 
 function Home() {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      <Box sx={{ display: 'flex', gap: 4 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4,  }}>
+      <Box sx={{ display: 'flex', gap: 4,flexWrap: 'wrap' }}>
         {/* Left container: Doctors list */}
-        <TableContainer component={Paper} sx={{ flex: 1 }}>
-          <Typography variant="h6" sx={{ p: 2 }}>Doctors</Typography>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Hospital</TableCell>
-                <TableCell>Category</TableCell>
-                <TableCell>Fees</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Image</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {doctors.map((doctor) => (
-                <TableRow key={doctor.id}>
-                  <TableCell>{doctor.id}</TableCell>
-                  <TableCell>{doctor.name}</TableCell>
-                  <TableCell>{doctor.hospital}</TableCell>
-                  <TableCell>{doctor.category}</TableCell>
-                  <TableCell>${doctor.fees}</TableCell>
-                  <TableCell>{doctor.phone}</TableCell>
-                  <TableCell>
-                    <Avatar alt={doctor.name} src={doctor.image} />
-                  </TableCell>
-                  <TableCell>
-                    <Button variant="contained" color="primary" size="small" sx={{ mr: 1 }}>
-                      Update
-                    </Button>
-                    <Button variant="contained" color="error" size="small">
-                      Delete
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Box sx={{ flex: 1 }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>Doctors</Typography>
+          <Paper sx={{ overflow: 'hidden' }}>
+            <Box sx={{ maxHeight: '400px', overflow: 'auto' }}>
+              <DoctorList compact={true} /> {/* Pass compact prop to indicate this is a summary view */}
+            </Box>
+          </Paper>
+        </Box>
 
         {/* Right container: Users list */}
         <TableContainer component={Paper} sx={{ flex: 1 }}>
@@ -120,4 +84,3 @@ function Home() {
 }
 
 export default Home;
-
