@@ -10,7 +10,8 @@ export default function UserDetails({ userId }) {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(`http://127.0.0.1:8000/user/${userId}`);
-        setData(response.data);
+        const userData = Array.isArray(response.data) ? response.data[0] : response.data; // Handle array or single object
+        setData(userData);
       } catch (err) {
         console.error("Error fetching user data:", err);
         setError("Failed to fetch user data. Please try again later.");
@@ -19,7 +20,6 @@ export default function UserDetails({ userId }) {
 
     if (userId) fetchUserData();
   }, [userId]);
-  console.log("user id is", userId);
 
   if (error) {
     return <div className="error-message">{error}</div>;

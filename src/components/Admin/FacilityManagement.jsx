@@ -1,25 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, 
   Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle
 } from '@mui/material';
 
-// Sample data for hospitals
-const initialHospitals = [
-  { id: 1, name: 'City Hospital', services: 'General, Emergency', address: '123 Main St, City', contactNumber: '123-456-7890' },
-  { id: 2, name: 'Central Clinic', services: 'Pediatrics, Orthopedics', address: '456 Oak Ave, Town', contactNumber: '098-765-4321' },
-];
-
 function FacilityManagement() {
-  const [hospitals, setHospitals] = useState(initialHospitals);
+  const [hospitals, setHospitals] = useState([]);
   const [open, setOpen] = useState(false);
-  const [currentHospital, setCurrentHospital] = useState({ id: '', name: '', services: '', address: '', contactNumber: '' });
+  const [currentHospital, setCurrentHospital] = useState({
+    name: '',
+    services: '',
+    address: '',
+    contact: '',
+    location: ''
+  });
   const [isEditing, setIsEditing] = useState(false);
+
+  // Fetch hospitals on component mount
+  useEffect(() => {
+    fetchHospitals();
+  }, []);
+
+  const fetchHospitals = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/list-hospital');
+      const data = await response.json();
+      setHospitals(data);
+    } catch (error) {
+      console.error('Error fetching hospitals:', error);
+    }
+  };
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setCurrentHospital({ id: '', name: '', services: '', address: '', contactNumber: '' });
+    setCurrentHospital({ name: '', services: '', address: '', contact: '', location: '' });
     setIsEditing(false);
   };
 
@@ -28,13 +43,37 @@ function FacilityManagement() {
     setCurrentHospital({ ...currentHospital, [name]: value });
   };
 
-  const handleSubmit = () => {
-    if (isEditing) {
-      setHospitals(hospitals.map(hospital => hospital.id === currentHospital.id ? currentHospital : hospital));
-    } else {
-      setHospitals([...hospitals, { ...currentHospital, id: hospitals.length + 1 }]);
+  const handleSubmit = async () => {
+    try {
+      if (isEditing) {
+        const response = await fetch(`http://127.0.0.1:8000/update-hospital/${currentHospital.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(currentHospital),
+        });
+        
+        if (response.ok) {
+          fetchHospitals(); // Refresh the list
+        }
+      } else {
+        const response = await fetch('http://127.0.0.1:8000/create-hospital', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(currentHospital),
+        });
+        
+        if (response.ok) {
+          fetchHospitals(); // Refresh the list
+        }
+      }
+      handleClose();
+    } catch (error) {
+      console.error('Error saving hospital:', error);
     }
-    handleClose();
   };
 
   const handleEdit = (hospital) => {
@@ -43,8 +82,18 @@ function FacilityManagement() {
     handleOpen();
   };
 
-  const handleDelete = (id) => {
-    setHospitals(hospitals.filter(hospital => hospital.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/delete-hospital/${id}`, {
+        method: 'DELETE',
+      });
+      
+      if (response.ok) {
+        fetchHospitals(); // Refresh the list
+      }
+    } catch (error) {
+      console.error('Error deleting hospital:', error);
+    }
   };
 
   return (
@@ -56,22 +105,22 @@ function FacilityManagement() {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Services</TableCell>
               <TableCell>Address</TableCell>
-              <TableCell>Contact Number</TableCell>
+              <TableCell>Contact</TableCell>
+              <TableCell>Location</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {hospitals.map((hospital) => (
               <TableRow key={hospital.id}>
-                <TableCell>{hospital.id}</TableCell>
                 <TableCell>{hospital.name}</TableCell>
                 <TableCell>{hospital.services}</TableCell>
                 <TableCell>{hospital.address}</TableCell>
-                <TableCell>{hospital.contactNumber}</TableCell>
+                <TableCell>{hospital.contact}</TableCell>
+                <TableCell>{hospital.location}</TableCell>
                 <TableCell>
                   <Button variant="contained" color="primary" size="small" onClick={() => handleEdit(hospital)} sx={{ mr: 1 }}>
                     Update
@@ -122,12 +171,22 @@ function FacilityManagement() {
           />
           <TextField
             margin="dense"
-            name="contactNumber"
+            name="contact"
             label="Contact Number"
             type="text"
             fullWidth
             variant="standard"
-            value={currentHospital.contactNumber}
+            value={currentHospital.contact}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="location"
+            label="Location"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={currentHospital.location}
             onChange={handleInputChange}
           />
         </DialogContent>
@@ -141,4 +200,3 @@ function FacilityManagement() {
 }
 
 export default FacilityManagement;
-
