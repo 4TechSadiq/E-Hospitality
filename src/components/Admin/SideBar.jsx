@@ -50,6 +50,12 @@ function Sidebar({ onViewChange }) {
           </ListItemIcon>
           <ListItemText primary="Doctor Management" />
         </ListItem>
+        <ListItem button onClick={() => onViewChange('sendnotification')}>
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText primary="Send notification" />
+        </ListItem>
       </List>
     </Drawer>
   );

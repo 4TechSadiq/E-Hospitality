@@ -7,6 +7,7 @@ import UserList from './UserList';
 import FacilityManagement from './FacilityManagement';
 import AppointmentManagement from './AppointmentManagement';
 import Home from './Home';
+import SendNotification from './SendNotification';
 
 const theme = createTheme();
 
@@ -25,6 +26,8 @@ function AdminDashboard() {
         return <FacilityManagement />;
       case 'appointments':
         return <AppointmentManagement />;
+      case 'sendnotification':
+        return <SendNotification />;
       default:
         return <Home />;
     }

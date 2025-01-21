@@ -1,5 +1,3 @@
-// PrescriptionTable.jsx
-
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import {
@@ -128,13 +126,17 @@ export default function PrescriptionTable() {
         outcome,
       };
 
+      // Create notification data
+      const notificationData = {
+        prescription: patientId, // Using patientId as prescription reference
+        price: Math.floor(Math.random() * (400 - 50 + 1)) + 50, // Random price between 50 and 400
+        status: 'pending',
+        payment_id: 'gh6vgvh'
+      };
+      
+      console.log(notificationData)
       // Send all requests
       const responses = await Promise.all([
-        // fetch('http://127.0.0.1:8000/create-prescription', {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify(prescriptionData)
-        // }),
         fetch('http://127.0.0.1:8000/create-med-condition', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -144,8 +146,18 @@ export default function PrescriptionTable() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(treatmentHistoryData)
+        }),
+        
+        fetch('http://127.0.0.1:8000/create-notification/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(notificationData)
         })
       ]);
+
+      // Log responses for debugging
+      const responseData = await Promise.all(responses.map(r => r.json()));
+      console.log('Response data:', responseData);
 
       // Check if all requests were successful
       const hasError = responses.some(response => !response.ok);
@@ -153,7 +165,7 @@ export default function PrescriptionTable() {
         throw new Error('One or more requests failed');
       }
 
-      alert('Prescription created successfully!');
+      alert('Prescription and notification created successfully!');
       handleReset();
     } catch (error) {
       console.error('Error submitting data:', error);

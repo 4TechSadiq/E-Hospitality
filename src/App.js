@@ -15,6 +15,7 @@ import FacilityManagement from "./components/Admin/FacilityManagement";
 import DoctorList from "./components/Admin/DoctorList";
 import UserList from "./components/Admin/UserList";
 import AppointmentManagement from "./components/Admin/AppointmentManagement";
+import SendNotification from "./components/Admin/SendNotification";
 const stripe = loadStripe("pk_test_51BTUDGJAJfZb9HEBwDg86TN1KNprHjkfipXmEDMb0gSCassK5T3ZfxsAbcgKVmAIXF7oZ6ItlZZbXO6idTHE67IM007EwQ4uN3", {
   betas: ['custom_checkout_beta_5'],
 });
@@ -36,6 +37,7 @@ function App() {
           <Route path="users" element={<UserList />} />
           <Route path="facilities" element={<FacilityManagement />} />
           <Route path="appointments" element={<AppointmentManagement />} />
+          <Route path="sendnotification" element={<SendNotification />} />
 
         </Route>
         <Route path="/signup" element={<SignUp />} />

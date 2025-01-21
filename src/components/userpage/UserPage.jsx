@@ -13,6 +13,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import ListAppointments from './ListAppointments';
+import Notification from './Notification';
 
 export default function UserPage() {
   const { userId } = useParams();
@@ -60,6 +61,15 @@ export default function UserPage() {
         </div>
       </div>
       <div>
+
+      <div className="container">
+        <div className="col-12 mt-4 mb-2">
+          <div className="col-lg-12 col-sm-12 d-flex justify-content-center">
+            <Notification />
+          </div>
+        </div>
+      </div>
+      <div></div>
         
         <Typography className="text-center" variant="h4">
           BOOK APPOINTMENTS
